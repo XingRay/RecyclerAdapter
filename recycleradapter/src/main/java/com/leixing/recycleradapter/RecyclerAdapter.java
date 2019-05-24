@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.ListIterator;
  * <p>
  * description : 用于{@RecyclerView}实现列表展示功能
  * 如果列表中的item只有一种布局，通过{@link RecyclerAdapter#itemLayoutId(int)}传入布局文件资源ID即可
- * 然后再通过{@link RecyclerAdapter#viewHolderFactory(BaseViewHolderFactory)}方法传入{@code ViewHolder}
+ * 然后再通过{@link RecyclerAdapter#viewHolderFactory(ViewHolderFactory)}方法传入{@code ViewHolder}
  * 的工厂类即可。
  * 同时也支持多布局类型列表，通过调用{@link RecyclerAdapter#multiTypeSupport(MultiTypeSupport)}方法
  * 传入{@link MultiTypeSupport}的实现类即可
@@ -34,30 +35,36 @@ public final class RecyclerAdapter<T, VH extends BaseViewHolder<T>> extends Recy
     private OnItemClickListener<T> mOnItemClickListener;
     private final LayoutInflater mInflater;
     private int mItemLayoutId;
-    private BaseViewHolderFactory<VH> mFactory;
+    private ViewHolderFactory<VH> mFactory;
     private MultiTypeSupport<T> mMultiTypeSupport;
 
-    public RecyclerAdapter(Context context) {
+    public RecyclerAdapter(@NonNull Context context) {
         mItems = new ArrayList<>();
         mInflater = LayoutInflater.from(context);
     }
 
-    public RecyclerAdapter<T, VH> itemLayoutId(int itemLayoutId) {
+    final public RecyclerAdapter<T, VH> itemLayoutId(int itemLayoutId) {
         mItemLayoutId = itemLayoutId;
         return this;
     }
 
-    public RecyclerAdapter<T, VH> viewHolderFactory(BaseViewHolderFactory<VH> factory) {
+    final public RecyclerAdapter<T, VH> viewHolderFactory(@Nullable ViewHolderFactory<VH> factory) {
         mFactory = factory;
         return this;
     }
 
-    public RecyclerAdapter<T, VH> multiTypeSupport(MultiTypeSupport<T> support) {
+    final public RecyclerAdapter<T, VH> multiTypeSupport(@Nullable MultiTypeSupport<T> support) {
         mMultiTypeSupport = support;
         return this;
     }
 
-    public void update(List<T> list) {
+    public RecyclerAdapter<T, VH> itemClickListener(@Nullable OnItemClickListener<T> listener) {
+        mOnItemClickListener = listener;
+        return this;
+    }
+
+
+    final public void update(@Nullable List<T> list) {
         mItems.clear();
         if (list != null) {
             mItems.addAll(list);
@@ -65,16 +72,16 @@ public final class RecyclerAdapter<T, VH extends BaseViewHolder<T>> extends Recy
         notifyDataSetChanged();
     }
 
-    public void clear() {
+    final public void clear() {
         mItems.clear();
         notifyDataSetChanged();
     }
 
-    public void add(T item) {
+    final public void add(@Nullable T item) {
         add(mItems.size(), item);
     }
 
-    public void add(int index, T item) {
+    public void add(int index, @Nullable T item) {
         if (item == null) {
             return;
         }
@@ -82,11 +89,11 @@ public final class RecyclerAdapter<T, VH extends BaseViewHolder<T>> extends Recy
         notifyItemInserted(index);
     }
 
-    public void addAll(List<T> list) {
+    public void addAll(@Nullable List<T> list) {
         addAll(mItems.size(), list);
     }
 
-    public void addAll(int start, List<T> items) {
+    public void addAll(int start, @Nullable List<T> items) {
         if (items == null) {
             return;
         }
@@ -140,7 +147,7 @@ public final class RecyclerAdapter<T, VH extends BaseViewHolder<T>> extends Recy
             layoutId = mItemLayoutId;
         }
         View itemView = mInflater.inflate(layoutId, parent, false);
-        final VH viewHolder = mFactory.createViewHolder(itemView, viewType);
+        final VH viewHolder = mFactory.build(itemView, viewType);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,10 +180,5 @@ public final class RecyclerAdapter<T, VH extends BaseViewHolder<T>> extends Recy
     @Override
     public int getItemCount() {
         return mItems.size();
-    }
-
-    public RecyclerAdapter<T, VH> itemClickListener(OnItemClickListener<T> listener) {
-        mOnItemClickListener = listener;
-        return this;
     }
 }

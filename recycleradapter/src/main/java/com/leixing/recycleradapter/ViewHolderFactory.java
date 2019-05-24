@@ -2,6 +2,8 @@ package com.leixing.recycleradapter;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author : leixing
  * email : leixing1012@qq.com
@@ -9,7 +11,7 @@ import android.view.View;
  * <p>
  * description : {@code ViewHolder}的工厂类，用于生成{@code ViewHolder}
  */
-public abstract class BaseViewHolderFactory<VH> {
+public interface ViewHolderFactory<VH> {
     /**
      * 构造{@code ViewHolder}
      *
@@ -17,5 +19,5 @@ public abstract class BaseViewHolderFactory<VH> {
      * @param viewType 条目的布局类型
      * @return {@code ViewHolder}
      */
-    public abstract VH createViewHolder(View itemView, int viewType);
+    VH build(@NonNull View itemView, int viewType);
 }

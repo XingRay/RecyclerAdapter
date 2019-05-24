@@ -2,6 +2,9 @@ package com.leixing.recycleradapter;
 
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * @author : leixing
  * email : leixing1012@qq.com
@@ -17,5 +20,5 @@ public interface OnItemClickListener<T> {
      * @param position 点击的Item的位置
      * @param t        点击的item对应的数据
      */
-    void onItemClick(ViewGroup parent, int position, T t);
+    void onItemClick(@NonNull ViewGroup parent, int position, @Nullable T t);
 }

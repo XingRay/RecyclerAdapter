@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leixing.recycleradapter.BaseViewHolderFactory;
 import com.leixing.recycleradapter.OnItemClickListener;
 import com.leixing.recycleradapter.RecyclerAdapter;
+import com.leixing.recycleradapter.ViewHolderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,15 +67,15 @@ public class RecyclerAdapterActivity extends Activity {
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new RecyclerAdapter<Banner, BannerViewHolder>(mContext)
                 .itemLayoutId(R.layout.view_banner_list_item)
-                .viewHolderFactory(new BaseViewHolderFactory<BannerViewHolder>() {
+                .viewHolderFactory(new ViewHolderFactory<BannerViewHolder>() {
                     @Override
-                    public BannerViewHolder createViewHolder(View itemView, int viewType) {
+                    public BannerViewHolder build(@NonNull View itemView, int viewType) {
                         return new BannerViewHolder(itemView);
                     }
                 })
                 .itemClickListener(new OnItemClickListener<Banner>() {
                     @Override
-                    public void onItemClick(ViewGroup parent, int position, Banner banner) {
+                    public void onItemClick(@NonNull ViewGroup parent, int position, Banner banner) {
                         onBannerClick(position, banner);
                     }
                 });

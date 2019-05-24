@@ -1,5 +1,7 @@
 package com.leixing.recycleradapter;
 
+import androidx.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
  * <p>
  */
 class Util {
-    private static <T> int getSize(Iterable<T> iterable) {
+    private static <T> int getSize(@Nullable Iterable<T> iterable) {
         if (iterable == null) {
             return 0;
         }
@@ -27,11 +29,11 @@ class Util {
         return size;
     }
 
-    private static boolean isOutOfIndex(Iterable<?> iterable, int index) {
+    private static boolean isOutOfIndex(@Nullable Iterable<?> iterable, int index) {
         return index < 0 || index >= getSize(iterable);
     }
 
-    static <T> void move(List<T> list, int fromIndex, int toIndex) {
+    static <T> void move(@Nullable List<T> list, int fromIndex, int toIndex) {
         if (isOutOfIndex(list, fromIndex)) {
             return;
         }

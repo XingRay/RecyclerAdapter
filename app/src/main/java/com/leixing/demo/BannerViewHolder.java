@@ -3,6 +3,8 @@ package com.leixing.demo;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.leixing.recycleradapter.BaseViewHolder;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class BannerViewHolder extends BaseViewHolder<Banner> {
     }
 
     @Override
-    protected void onRefreshItemView(List<Object> payloads) {
+    protected void onRefreshItemView(@NonNull List<Object> payloads) {
         super.onRefreshItemView(payloads);
         for (Object payload : payloads) {
             if (payload instanceof Boolean) {
