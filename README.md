@@ -21,12 +21,10 @@ Add it in your root build.gradle at the end of repositories:
 
 ### Step 2. Add the dependency
 
-[![](https://jitpack.io/v/XingRay/RecyclerAdapter.svg)](https://jitpack.io/#XingRay/RecyclerAdapter)
-
 ``` groovy
 
 	dependencies {
-	        implementation 'com.github.XingRay:RecyclerAdapter:1.0.2'
+	        implementation 'com.github.XingRay:RecyclerAdapter:[![1.0.2](https://jitpack.io/v/XingRay/RecyclerAdapter.svg)](https://jitpack.io/#XingRay/RecyclerAdapter)'
 	}
 
 ```
