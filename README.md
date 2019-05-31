@@ -20,16 +20,29 @@ Add it in your root build.gradle at the end of repositories:
 ```
 
 ### Step 2. Add the dependency
-
+Tag : [![](https://jitpack.io/v/XingRay/RecyclerAdapter.svg)](https://jitpack.io/#XingRay/RecyclerAdapter)
 ``` groovy
 
 	dependencies {
-	        implementation 'com.github.XingRay:RecyclerAdapter:1.0.1'
+	        implementation 'com.github.XingRay:RecyclerAdapter:Tag'
 	}
 
 ```
 
 ### step 3. code
+
+```kotlin
+
+mAdapter = RecyclerAdapter<TestData, TestViewHolder>(applicationContext)
+		.itemLayoutId(R.layout.item_recycler_view_test_list)
+		.viewHolderFactory { itemView, _ -> TestViewHolder(itemView) }
+		.itemClickListener { _, position, t ->
+			showToast("$position ${t?.name} clicked")
+		}
+
+rvList.adapter = mAdapter
+
+```
 
 ```java
 

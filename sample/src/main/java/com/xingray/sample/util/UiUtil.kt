@@ -1,3 +1,4 @@
+@file:JvmName("UiUtil")
 package com.xingray.sample.util
 
 import android.app.Activity

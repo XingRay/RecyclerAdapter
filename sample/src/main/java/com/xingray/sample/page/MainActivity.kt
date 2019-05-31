@@ -13,7 +13,7 @@ import com.xingray.sample.R
 
 class MainActivity : AppCompatActivity() {
 
-    var mAdapter: RecyclerAdapter<Test, TestViewHolder>? = null
+    private var mAdapter: RecyclerAdapter<Test, TestViewHolder>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
                 },
                 Test("viewpager2 test") {
                     ViewPager2TestActivity.start(this)
+                },
+                Test("java test") {
+                    JavaTestActivity.start(this)
                 }
         ))
     }
@@ -50,9 +53,9 @@ class MainActivity : AppCompatActivity() {
         rvList.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
     }
 
-    data class Test(val name: String, val starter: () -> Unit)
+    private data class Test(val name: String, val starter: () -> Unit)
 
-    class TestViewHolder(itemView: View) : BaseViewHolder<Test>(itemView) {
+    private class TestViewHolder(itemView: View) : BaseViewHolder<Test>(itemView) {
 
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 
