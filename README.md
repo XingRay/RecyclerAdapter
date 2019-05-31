@@ -20,16 +20,20 @@ Add it in your root build.gradle at the end of repositories:
 ```
 
 ### Step 2. Add the dependency
-Tag : [![](https://jitpack.io/v/XingRay/RecyclerAdapter.svg)](https://jitpack.io/#XingRay/RecyclerAdapter)
+
+[![](https://jitpack.io/v/XingRay/RecyclerAdapter.svg)](https://jitpack.io/#XingRay/RecyclerAdapter)
+
 ``` groovy
 
 	dependencies {
-	        implementation 'com.github.XingRay:RecyclerAdapter:Tag'
+	        implementation 'com.github.XingRay:RecyclerAdapter:1.0.2'
 	}
 
 ```
 
 ### step 3. code
+
+#### kotlin 
 
 ```kotlin
 
@@ -43,6 +47,8 @@ mAdapter = RecyclerAdapter<TestData, TestViewHolder>(applicationContext)
 rvList.adapter = mAdapter
 
 ```
+
+#### java
 
 ```java
 
