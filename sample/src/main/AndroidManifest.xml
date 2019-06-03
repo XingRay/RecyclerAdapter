@@ -19,6 +19,7 @@
         <activity android:name=".page.RecyclerViewTestActivity" />
         <activity android:name=".page.ViewPager2TestActivity" />
         <activity android:name=".page.JavaTestActivity" />
+        <activity android:name=".page.MultiLayoutTestActivity" />
     </application>
 
 </manifest>

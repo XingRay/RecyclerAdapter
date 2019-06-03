@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
  *
  *
  * description : 用于展示`RecyclerView`列表的{@ViewHolder}的基类，
- * 与[RecyclerAdapter]配合使用，支持`Item`的渲染([onBindItemView])
- * 和局部刷新([BaseViewHolder.onRefreshItemView])
+ * 与[RecyclerAdapter]配合使用，支持`Item`的渲染[onBindItemView]
+ * 和局部刷新[BaseViewHolder.onRefreshItemView]
  */
 abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -19,5 +19,9 @@ abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemV
 
     }
 
-    abstract fun onBindItemView(t: T?, position: Int)
+    fun onBindItemView(t: Any, position: Int) {
+        bindItemView(t as T, position)
+    }
+
+    abstract fun bindItemView(t: T, position: Int)
 }

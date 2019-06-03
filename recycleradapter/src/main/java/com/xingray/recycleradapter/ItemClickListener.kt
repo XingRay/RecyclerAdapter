@@ -10,7 +10,7 @@ import android.view.ViewGroup
  *
  * description : 条目点击事件监听器
  */
-interface OnItemClickListener<T> {
+interface ItemClickListener<T> {
     /**
      * 列表条目的点击事件
      *

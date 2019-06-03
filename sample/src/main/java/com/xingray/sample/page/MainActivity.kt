@@ -13,7 +13,7 @@ import com.xingray.sample.R
 
 class MainActivity : AppCompatActivity() {
 
-    private var mAdapter: RecyclerAdapter<Test, TestViewHolder>? = null
+    private var mAdapter: RecyclerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity() {
                 },
                 Test("java test") {
                     JavaTestActivity.start(this)
+                },
+                Test("multi layout test") {
+                    MultiLayoutTestActivity.start(this)
                 }
         ))
     }
@@ -44,10 +47,12 @@ class MainActivity : AppCompatActivity() {
     private fun initList(rvList: RecyclerView) {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
-        mAdapter = RecyclerAdapter<Test, TestViewHolder>(applicationContext)
-                .itemLayoutId(R.layout.item_main_list)
-                .viewHolderFactory { itemView, _ -> TestViewHolder(itemView) }
-                .itemClickListener { _, _, t -> t?.starter?.invoke() }
+        mAdapter = RecyclerAdapter(applicationContext)
+                .typeSupport(Test::class.java)
+                .viewSupport(R.layout.item_main_list, TestViewHolder::class.java) { _, _, t ->
+                    t.starter.invoke()
+                }
+                .registerType()
 
         rvList.adapter = mAdapter
         rvList.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
@@ -59,8 +64,8 @@ class MainActivity : AppCompatActivity() {
 
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 
-        override fun onBindItemView(t: Test?, position: Int) {
-            tvText.text = t?.name
+        override fun bindItemView(t: Test, position: Int) {
+            tvText.text = t.name
         }
     }
 }

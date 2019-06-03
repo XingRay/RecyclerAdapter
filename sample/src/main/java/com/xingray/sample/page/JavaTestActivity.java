@@ -3,7 +3,6 @@ package com.xingray.sample.page;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -12,9 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xingray.recycleradapter.OnItemClickListener;
+import com.xingray.recycleradapter.ItemClickListener;
 import com.xingray.recycleradapter.RecyclerAdapter;
-import com.xingray.recycleradapter.ViewHolderFactory;
 import com.xingray.sample.R;
 import com.xingray.sample.common.DataRepository;
 import com.xingray.sample.common.TestData;
@@ -28,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JavaTestActivity extends AppCompatActivity {
 
-    private RecyclerAdapter<TestData, TestViewHolder> mAdapter;
+    private RecyclerAdapter mAdapter;
 
     private DataRepository mRepository = new DataRepository();
 
@@ -57,20 +55,16 @@ public class JavaTestActivity extends AppCompatActivity {
     private void initList(RecyclerView rvList) {
         rvList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        mAdapter = new RecyclerAdapter<TestData, TestViewHolder>(getApplicationContext())
-                .itemLayoutId(R.layout.item_recycler_view_test_list)
-                .viewHolderFactory(new ViewHolderFactory<TestViewHolder>() {
-                    @Override
-                    public TestViewHolder build(@NotNull View itemView, int viewType) {
-                        return new TestViewHolder(itemView);
-                    }
-                })
-                .itemClickListener(new OnItemClickListener<TestData>() {
+        mAdapter = new RecyclerAdapter(getApplicationContext())
+                .typeSupport(TestData.class)
+                .layoutViewSupport(R.layout.item_recycler_view_test_list)
+                .viewHolder(TestViewHolder.class)
+                .itemClickListener(new ItemClickListener<TestData>() {
                     @Override
                     public void onItemClick(@NotNull ViewGroup parent, int position, @org.jetbrains.annotations.Nullable TestData testData) {
                         UiUtil.showToast(JavaTestActivity.this, position + "" + testData.getName() + " clicked");
                     }
-                });
+                }).registerView().registerType();
 
         rvList.setAdapter(mAdapter);
         rvList.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));

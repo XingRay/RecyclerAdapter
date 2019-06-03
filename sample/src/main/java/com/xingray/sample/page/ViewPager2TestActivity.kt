@@ -21,7 +21,7 @@ class ViewPager2TestActivity : AppCompatActivity() {
         }
     }
 
-    private var mAdapter: RecyclerAdapter<TestData, TestViewHolder>? = null
+    private var mAdapter: RecyclerAdapter? = null
     private val mRepository = DataRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +43,13 @@ class ViewPager2TestActivity : AppCompatActivity() {
     private fun initPager(vpPager: ViewPager2) {
         vpPager.orientation = ViewPager2.ORIENTATION_VERTICAL
 
-        mAdapter = RecyclerAdapter<TestData, TestViewHolder>(applicationContext)
-                .itemLayoutId(R.layout.item_view_pager2_test_list)
-                .viewHolderFactory { itemView, _ -> TestViewHolder(itemView) }
+        mAdapter = RecyclerAdapter(applicationContext)
+                .typeSupport(TestData::class.java)
+                .layoutViewSupport(R.layout.item_view_pager2_test_list)
+                .viewHolder(TestViewHolder::class.java)
                 .itemClickListener { _, position, t ->
-                    showToast("$position ${t?.name} clicked")
-                }
+                    showToast("$position ${t.name} clicked")
+                }.registerView().registerType()
 
         vpPager.adapter = mAdapter
     }

@@ -20,4 +20,15 @@ class DataRepository {
 
         return list
     }
+
+    fun loadData1(): List<TestData1> {
+        val list = mutableListOf<TestData1>()
+        val r = Random(System.currentTimeMillis())
+
+        for (i in 0 until 100) {
+            list.add(TestData1(1, "test data $i", 16.0f + 16 * r.nextFloat()))
+        }
+
+        return list
+    }
 }

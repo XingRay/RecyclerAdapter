@@ -56,6 +56,15 @@ fun <T> List<T>?.move(fromIndex: Int, toIndex: Int): Boolean {
     return true
 }
 
+fun <T> MutableList<T>.removeAll(): Boolean {
+    if (isEmpty()) {
+        return false
+    }
+
+    clear()
+    return true
+}
+
 fun <T> MutableList<T>.update(list: List<T>?): Boolean {
     var updated = false
     if (!isEmpty()) {
@@ -103,4 +112,12 @@ fun <T> MutableList<T>.remove(position: Int, count: Int): List<T>? {
     }
 
     return removed
+}
+
+fun <T> MutableList<T>.remove(position: Int): Boolean {
+    return if (position in 0 until size) {
+        removeAt(position) != null
+    } else {
+        false
+    }
 }
