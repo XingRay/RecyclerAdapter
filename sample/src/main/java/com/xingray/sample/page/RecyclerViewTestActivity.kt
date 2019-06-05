@@ -51,7 +51,7 @@ class RecyclerViewTestActivity : AppCompatActivity() {
                 .layoutViewSupport(R.layout.item_recycler_view_test_list)
                 .viewHolder(TestViewHolder::class.java)
                 .itemClickListener { _, position, t ->
-                    showToast("$position ${t?.name} clicked")
+                    showToast("$position ${t.name} clicked")
                 }.registerView().registerType()
 
         rvList.adapter = mAdapter

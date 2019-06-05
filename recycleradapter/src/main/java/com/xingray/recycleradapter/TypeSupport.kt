@@ -7,9 +7,9 @@ class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAda
 
     private val mContext = context
     private val mClass = cls
-    val mAdapter = adapter
+    internal val mAdapter = adapter
     private var mViewTypeMapper: ((T, Int) -> Int)? = null
-    var mDefaultViewType = 0
+    private var mDefaultViewType = UniqueId.get()
 
     fun registerType(): RecyclerAdapter {
         mAdapter.registerType(mClass, this)
@@ -18,6 +18,7 @@ class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAda
 
     fun getViewType(data: Any, position: Int): Int {
         return if (mClass.isAssignableFrom(data::class.java)) {
+            @Suppress("UNCHECKED_CAST")
             val t: T = data as T
             mViewTypeMapper?.invoke(t, position) ?: mDefaultViewType
         } else {

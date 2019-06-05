@@ -20,6 +20,7 @@ abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemV
     }
 
     fun onBindItemView(t: Any, position: Int) {
+        @Suppress("UNCHECKED_CAST")
         bindItemView(t as T, position)
     }
 

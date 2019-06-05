@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<out Any>>() {
 
     private val mContext = context
-    val mItems: MutableList<Any> = mutableListOf()
+    internal val mItems: MutableList<Any> = mutableListOf()
     private val mTypeSupportMap = mutableMapOf<Class<*>, TypeSupport<*>>()
     private val mViewSupports = SparseArray<ViewSupport<out Any>>()
 
@@ -71,8 +71,29 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         mTypeSupportMap[typeClass] = typeSupport
     }
 
+    fun <T : Any, VH : BaseViewHolder<T>> registerType(typeClass: Class<T>, mapper: (T, Int) -> Class<out VH>): RecyclerAdapter {
+        return this
+    }
+
     fun <T : Any> registerView(viewType: Int, viewSupport: ViewSupport<T>) {
         mViewSupports.put(viewType, viewSupport)
+    }
+
+    inline fun <reified T : Any, VH : BaseViewHolder<T>> register(vhCls: Class<VH>, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+        val annotation = vhCls.getAnnotation(LayoutId::class.java)
+                ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
+        return register(T::class.java, vhCls, annotation.layoutId, 0, itemClickListener)
+    }
+
+    fun <T : Any, VH : BaseViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, viewType: Int = 0, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+//        val typeSupport = typeSupport(cls)
+//        val layoutViewSupport = typeSupport.layoutViewSupport(layoutId, viewType)
+//        if (itemClickListener != null) {
+//            layoutViewSupport.itemClickListener(itemClickListener)
+//        }
+
+
+        return this
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -3,7 +3,7 @@ package com.xingray.recycleradapter
 import android.view.View
 import android.view.ViewGroup
 
-open abstract class ViewSupport<T : Any>(viewType: Int, typeSupport: TypeSupport<T>) {
+abstract class ViewSupport<T : Any>(viewType: Int, typeSupport: TypeSupport<T>) {
     private val mTypeSupport = typeSupport
 
     private val mViewType = viewType
@@ -20,6 +20,7 @@ open abstract class ViewSupport<T : Any>(viewType: Int, typeSupport: TypeSupport
         val holder = createViewHolder(itemView)
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
+            @Suppress("UNCHECKED_CAST")
             mItemClickListener?.invoke(parent, position, mTypeSupport.mAdapter.mItems[position] as T)
         }
         return holder
@@ -45,6 +46,7 @@ open abstract class ViewSupport<T : Any>(viewType: Int, typeSupport: TypeSupport
     open fun createViewHolder(itemView: View): BaseViewHolder<T> {
         val constructor = mClass?.getConstructor(View::class.java)
         constructor?.isAccessible = true
-        return (constructor?.newInstance(itemView) as BaseViewHolder<T>)!!
+        @Suppress("UNCHECKED_CAST")
+        return (constructor?.newInstance(itemView) as BaseViewHolder<T>)
     }
 }
