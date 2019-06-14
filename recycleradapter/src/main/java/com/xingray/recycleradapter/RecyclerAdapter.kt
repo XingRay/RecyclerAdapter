@@ -2,6 +2,7 @@ package com.xingray.recycleradapter
 
 import android.content.Context
 import android.util.SparseArray
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -82,17 +83,17 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
     inline fun <reified T : Any, VH : BaseViewHolder<T>> register(vhCls: Class<VH>, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
         val annotation = vhCls.getAnnotation(LayoutId::class.java)
                 ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
-        return register(T::class.java, vhCls, annotation.layoutId, 0, itemClickListener)
+        return register(T::class.java, vhCls, annotation.layoutId, itemClickListener)
     }
 
-    fun <T : Any, VH : BaseViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, viewType: Int = 0, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
-//        val typeSupport = typeSupport(cls)
-//        val layoutViewSupport = typeSupport.layoutViewSupport(layoutId, viewType)
-//        if (itemClickListener != null) {
-//            layoutViewSupport.itemClickListener(itemClickListener)
-//        }
-
-
+    fun <T : Any, VH : BaseViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+        val typeSupport = TypeSupport(mContext, cls, this)
+        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, typeSupport)
+        if (itemClickListener != null) {
+            layoutViewSupport.itemClickListener(itemClickListener)
+        }
+        layoutViewSupport.viewHolder(vhCls)
+        layoutViewSupport.registerView().registerType()
         return this
     }
 

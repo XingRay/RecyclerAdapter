@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
                 },
                 Test("multi layout test") {
                     MultiLayoutTestActivity.start(this)
+                },
+                Test("simple api test") {
+                    SimpleAPITestActivity.start(this)
                 }
         ))
     }

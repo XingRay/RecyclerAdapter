@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger
  *
  */
 object UniqueId {
-    private val id: AtomicInteger = AtomicInteger()
+    private val id: AtomicInteger = AtomicInteger(0xffff)
     fun get(): Int {
         return id.getAndIncrement()
     }
