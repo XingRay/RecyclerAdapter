@@ -1,6 +1,7 @@
 package com.xingray.recycleradapter
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 
 class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAdapter) {
@@ -41,11 +42,14 @@ class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAda
     }
 
     fun layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewSupport<T> {
-        return LayoutViewSupport(mContext, viewType, this).layoutId(layoutId)
+        return LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, this)
     }
 
     fun <VH : BaseViewHolder<T>> viewSupport(layoutId: Int, cls: Class<VH>, viewType: Int = 0, listener: ((ViewGroup, Int, T) -> Unit)): TypeSupport<T> {
-        return LayoutViewSupport(mContext, viewType, this).layoutId(layoutId).viewHolder(cls).itemClickListener(listener).registerView()
+        return LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, this)
+                .viewHolder(cls)
+                .itemClickListener(listener)
+                .registerView()
     }
 
     fun registerView(viewType: Int, viewSupport: ViewSupport<T>) {
