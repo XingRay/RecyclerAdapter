@@ -58,11 +58,11 @@ class SimpleAPITestActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .registerType(TestData::class.java) { _, position ->
+                .addTypeSupport(TestData::class.java) { _, position ->
                     if (position % 2 == 0) {
-                        return@registerType TestViewHolder::class.java
+                        return@addTypeSupport TestViewHolder::class.java
                     } else {
-                        return@registerType TestViewHolder1::class.java
+                        return@addTypeSupport TestViewHolder1::class.java
                     }
                 }
                 .register(TestViewHolder::class.java) { _, position, t ->

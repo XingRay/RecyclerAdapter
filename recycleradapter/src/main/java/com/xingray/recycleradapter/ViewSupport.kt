@@ -3,50 +3,64 @@ package com.xingray.recycleradapter
 import android.view.View
 import android.view.ViewGroup
 
-abstract class ViewSupport<T : Any>(viewType: Int, typeSupport: TypeSupport<T>) {
-    private val mTypeSupport = typeSupport
+abstract class ViewSupport<T : Any>(private val viewType: Int,
+                                    private val typeSupport: TypeSupport<T>) {
 
-    private val mViewType = viewType
-    var mClass: Class<*>? = null
-    private var mItemClickListener: ((ViewGroup, Int, T) -> Unit)? = null
+    var viewHolderClass: Class<*>? = null
+    private var itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null
+    private var viewHolderFactory: ((View) -> ViewHolder<T>)? = null
 
     fun registerView(): TypeSupport<T> {
-        mTypeSupport.registerView(mViewType, this)
-        return mTypeSupport
+        typeSupport.registerView(viewType, this)
+        return typeSupport
     }
 
-    fun onCreateViewHolder(parent: ViewGroup): BaseViewHolder<T> {
+    fun onCreateViewHolder(parent: ViewGroup): ViewHolder<T> {
         val itemView = createItemView(parent)
         val holder = createViewHolder(itemView)
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             @Suppress("UNCHECKED_CAST")
-            mItemClickListener?.invoke(parent, position, mTypeSupport.mAdapter.mItems[position] as T)
+            itemClickListener?.invoke(parent, position, typeSupport.adapter.mItems[position] as T)
         }
         return holder
     }
 
-    fun <VH : BaseViewHolder<T>> viewHolder(cls: Class<VH>): ViewSupport<T> {
-        mClass = cls
+    fun <VH : ViewHolder<T>> viewHolderClass(cls: Class<VH>): ViewSupport<T> {
+        viewHolderClass = cls
         return this
     }
 
     fun itemClickListener(listener: ItemClickListener<T>): ViewSupport<T> {
-        mItemClickListener = listener::onItemClick
+        itemClickListener = listener::onItemClick
         return this
     }
 
     fun itemClickListener(listener: ((ViewGroup, Int, T) -> Unit)): ViewSupport<T> {
-        mItemClickListener = listener
+        itemClickListener = listener
         return this
+    }
+
+    fun viewHolderFactory(factory: ViewHolderFactory<T>) {
+        viewHolderFactory = factory::createViewHolder
+    }
+
+    fun viewHolderFactory(factory: (View) -> ViewHolder<T>) {
+        viewHolderFactory = factory
     }
 
     abstract fun createItemView(parent: ViewGroup): View
 
-    open fun createViewHolder(itemView: View): BaseViewHolder<T> {
-        val constructor = mClass?.getConstructor(View::class.java)
-        constructor?.isAccessible = true
+    open fun createViewHolder(itemView: View): ViewHolder<T> {
+        val factory = viewHolderFactory
+        if (factory != null) {
+            return factory.invoke(itemView)
+        }
+        val cls = viewHolderClass
+                ?: throw NullPointerException("set viewHolderClass if viewHolderFactory is null")
+        val constructor = cls.getConstructor(View::class.java)
+        constructor.isAccessible = true
         @Suppress("UNCHECKED_CAST")
-        return (constructor?.newInstance(itemView) as BaseViewHolder<T>)
+        return (constructor.newInstance(itemView) as ViewHolder<T>)
     }
 }

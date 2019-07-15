@@ -56,9 +56,9 @@ public class JavaTestActivity extends AppCompatActivity {
         rvList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         mAdapter = new RecyclerAdapter(getApplicationContext())
-                .typeSupport(TestData.class)
+                .newTypeSupport(TestData.class)
                 .layoutViewSupport(R.layout.item_recycler_view_test_list)
-                .viewHolder(TestViewHolder.class)
+                .viewHolderClass(TestViewHolder.class)
                 .itemClickListener(new ItemClickListener<TestData>() {
                     @Override
                     public void onItemClick(@NotNull ViewGroup parent, int position, @org.jetbrains.annotations.Nullable TestData testData) {

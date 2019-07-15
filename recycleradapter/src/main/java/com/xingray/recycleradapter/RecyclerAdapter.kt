@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.xingray.recycleradapter
 
 import android.content.Context
@@ -6,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<out Any>>() {
+class RecyclerAdapter(context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
-    private val mContext = context
+    private val context = context
     internal val mItems: MutableList<Any> = mutableListOf()
     private val mTypeSupportMap = mutableMapOf<Class<*>, TypeSupport<*>>()
     private val mViewSupports = SparseArray<ViewSupport<out Any>>()
@@ -27,6 +29,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         addAll(mItems.size, list)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun addAll(start: Int, items: List<Any>?) {
         if (mItems.addAll(start, items)) {
             notifyItemRangeInserted(start, items?.size ?: 0)
@@ -64,35 +67,38 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         }
     }
 
-    fun <T : Any> typeSupport(cls: Class<T>): TypeSupport<T> {
-        return TypeSupport(mContext, cls, this)
+    fun <T : Any> newTypeSupport(cls: Class<T>): TypeSupport<T> {
+        return TypeSupport(context, cls, this)
     }
 
-    fun <T : Any> registerType(typeClass: Class<T>, typeSupport: TypeSupport<T>) {
-        mTypeSupportMap[typeClass] = typeSupport
+    fun <T : Any> addTypeSupport(cls: Class<T>, typeSupport: TypeSupport<T>) {
+        mTypeSupportMap[cls] = typeSupport
     }
 
-    fun <T : Any, VH : BaseViewHolder<T>> registerType(typeClass: Class<T>, mapper: (T, Int) -> Class<out VH>): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addTypeSupport(cls: Class<T>, mapper: (T, Int) -> Class<out VH>)
+            : RecyclerAdapter {
+        val typeSupport = TypeSupport(context, cls, this)
+        mTypeSupportMap[cls] = typeSupport
         return this
     }
 
-    fun <T : Any> registerView(viewType: Int, viewSupport: ViewSupport<T>) {
+    fun <T : Any> addViewSupport(viewType: Int, viewSupport: ViewSupport<T>) {
         mViewSupports.put(viewType, viewSupport)
     }
 
-    inline fun <reified T : Any, VH : BaseViewHolder<T>> register(vhCls: Class<VH>, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+    inline fun <reified T : Any, VH : ViewHolder<T>> register(vhCls: Class<VH>, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
         val annotation = vhCls.getAnnotation(LayoutId::class.java)
                 ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
         return register(T::class.java, vhCls, annotation.layoutId, itemClickListener)
     }
 
-    fun <T : Any, VH : BaseViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
-        val typeSupport = TypeSupport(mContext, cls, this)
-        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, typeSupport)
+    fun <T : Any, VH : ViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+        val typeSupport = TypeSupport(context, cls, this)
+        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(context), layoutId, 0, typeSupport)
         if (itemClickListener != null) {
             layoutViewSupport.itemClickListener(itemClickListener)
         }
-        layoutViewSupport.viewHolder(vhCls)
+        layoutViewSupport.viewHolderClass(vhCls)
         layoutViewSupport.registerView().registerType()
         return this
     }
@@ -103,7 +109,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         return typeSupport?.getViewType(itemData, position) ?: 0
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<out Any> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<out Any> {
         return mViewSupports.get(viewType).onCreateViewHolder(parent)
     }
 
@@ -111,7 +117,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         return mItems.size
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<out Any>, position: Int, payloads: List<Any>) {
+    override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
@@ -119,7 +125,7 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<BaseViewHolder<ou
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<out Any>, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int) {
         val t = mItems[position]
         holder.onBindItemView(t, position)
     }

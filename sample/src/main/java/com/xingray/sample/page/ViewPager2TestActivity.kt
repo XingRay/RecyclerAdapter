@@ -44,9 +44,9 @@ class ViewPager2TestActivity : AppCompatActivity() {
         vpPager.orientation = ViewPager2.ORIENTATION_VERTICAL
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .typeSupport(TestData::class.java)
+                .newTypeSupport(TestData::class.java)
                 .layoutViewSupport(R.layout.item_view_pager2_test_list)
-                .viewHolder(TestViewHolder::class.java)
+                .viewHolderClass(TestViewHolder::class.java)
                 .itemClickListener { _, position, t ->
                     showToast("$position ${t.name} clicked")
                 }.registerView().registerType()

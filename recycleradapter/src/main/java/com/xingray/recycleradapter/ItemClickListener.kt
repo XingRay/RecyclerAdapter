@@ -3,12 +3,12 @@ package com.xingray.recycleradapter
 import android.view.ViewGroup
 
 /**
+ * 条目点击事件监听器
+ *
  * @author : leixing
  * email : leixing1012@qq.com
  * @date : 2018/8/2 14:19
  *
- *
- * description : 条目点击事件监听器
  */
 interface ItemClickListener<T> {
     /**

@@ -50,7 +50,7 @@ class MultiLayoutTestActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .typeSupport(TestData::class.java)
+                .newTypeSupport(TestData::class.java)
                 .viewSupport(R.layout.item_recycler_view_test_list, TestViewHolder::class.java, 0) { _, position, t ->
                     showToast("$position ${t.name} clicked layout0")
                 }.viewSupport(R.layout.item_recycler_view_test_list1, TestViewHolder1::class.java, 1) { _, position, t ->
@@ -58,7 +58,7 @@ class MultiLayoutTestActivity : AppCompatActivity() {
                 }.viewTypeMapper { _, position ->
                     position % 2
                 }.registerType()
-                .typeSupport(TestData1::class.java)
+                .newTypeSupport(TestData1::class.java)
                 .viewSupport(R.layout.item_recycler_view_test1_list, TestData1ViewHolder::class.java, 2) { _, position, t ->
                     showToast("$position ${t.name} ${t.size} clicked TestData1")
                 }.registerType()

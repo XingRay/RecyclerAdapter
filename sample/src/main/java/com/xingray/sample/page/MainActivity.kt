@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.xingray.recycleradapter.BaseViewHolder
+import com.xingray.recycleradapter.ViewHolder
 import com.xingray.recycleradapter.RecyclerAdapter
 import com.xingray.sample.R
 
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .typeSupport(Test::class.java)
+                .newTypeSupport(Test::class.java)
                 .viewSupport(R.layout.item_main_list, TestViewHolder::class.java) { _, _, t ->
                     t.starter.invoke()
                 }
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     private data class Test(val name: String, val starter: () -> Unit)
 
-    private class TestViewHolder(itemView: View) : BaseViewHolder<Test>(itemView) {
+    private class TestViewHolder(itemView: View) : ViewHolder<Test>(itemView) {
 
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 

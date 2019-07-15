@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * description : 用于展示`RecyclerView`列表的{@ViewHolder}的基类，
  * 与[RecyclerAdapter]配合使用，支持`Item`的渲染[onBindItemView]
- * 和局部刷新[BaseViewHolder.onRefreshItemView]
+ * 和局部刷新[ViewHolder.onRefreshItemView]
  */
-abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+abstract class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     open fun onRefreshItemView(payloads: List<Any>) {
 

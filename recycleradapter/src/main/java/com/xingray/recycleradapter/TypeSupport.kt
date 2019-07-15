@@ -4,21 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAdapter) {
+class TypeSupport<T : Any>(private val context: Context,
+                           private val cls: Class<T>,
+                           internal val adapter: RecyclerAdapter) {
 
-    private val mContext = context
-    private val mClass = cls
-    internal val mAdapter = adapter
     private var mViewTypeMapper: ((T, Int) -> Int)? = null
     private var mDefaultViewType = UniqueId.get()
 
     fun registerType(): RecyclerAdapter {
-        mAdapter.registerType(mClass, this)
-        return mAdapter
+        adapter.addTypeSupport(cls, this)
+        return adapter
     }
 
     fun getViewType(data: Any, position: Int): Int {
-        return if (mClass.isAssignableFrom(data::class.java)) {
+        return if (cls.isAssignableFrom(data::class.java)) {
             @Suppress("UNCHECKED_CAST")
             val t: T = data as T
             mViewTypeMapper?.invoke(t, position) ?: mDefaultViewType
@@ -42,18 +41,18 @@ class TypeSupport<T : Any>(context: Context, cls: Class<T>, adapter: RecyclerAda
     }
 
     fun layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewSupport<T> {
-        return LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, this)
+        return LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, this)
     }
 
-    fun <VH : BaseViewHolder<T>> viewSupport(layoutId: Int, cls: Class<VH>, viewType: Int = 0, listener: ((ViewGroup, Int, T) -> Unit)): TypeSupport<T> {
-        return LayoutViewSupport(LayoutInflater.from(mContext), layoutId, viewType, this)
-                .viewHolder(cls)
+    fun <VH : ViewHolder<T>> viewSupport(layoutId: Int, cls: Class<VH>, viewType: Int = 0, listener: ((ViewGroup, Int, T) -> Unit)): TypeSupport<T> {
+        return LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, this)
+                .viewHolderClass(cls)
                 .itemClickListener(listener)
                 .registerView()
     }
 
     fun registerView(viewType: Int, viewSupport: ViewSupport<T>) {
         mDefaultViewType = viewType
-        mAdapter.registerView(viewType, viewSupport)
+        adapter.addViewSupport(viewType, viewSupport)
     }
 }
