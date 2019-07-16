@@ -2,29 +2,25 @@ package com.xingray.sample.page;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.ViewGroup;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.xingray.recycleradapter.ItemClickListener;
 import com.xingray.recycleradapter.RecyclerAdapter;
 import com.xingray.sample.R;
+import com.xingray.sample.common.Data0;
+import com.xingray.sample.common.Data0Layout0ViewHolder;
 import com.xingray.sample.common.DataRepository;
-import com.xingray.sample.common.TestData;
-import com.xingray.sample.common.TestViewHolder;
+import com.xingray.sample.common.ListActivity;
 import com.xingray.sample.util.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * @author leixing
  */
-public class JavaTestActivity extends AppCompatActivity {
+public class JavaTestActivity extends ListActivity {
 
     private RecyclerAdapter mAdapter;
 
@@ -35,38 +31,25 @@ public class JavaTestActivity extends AppCompatActivity {
         context.startActivity(starter);
     }
 
+    @NotNull
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_java_test);
-
-        RecyclerView rvList = findViewById(R.id.rv_list);
-        if (rvList != null) {
-            initList(rvList);
-        }
-
-        loadData();
+    public List<Object> loadData() {
+        List<?> data = mRepository.loadData0();
+        return (List<Object>) data;
     }
 
-    private void loadData() {
-        mAdapter.update(mRepository.loadData());
-    }
-
-    private void initList(RecyclerView rvList) {
-        rvList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-        mAdapter = new RecyclerAdapter(getApplicationContext())
-                .newTypeSupport(TestData.class)
-                .layoutViewSupport(R.layout.item_recycler_view_test_list)
-                .viewHolderClass(TestViewHolder.class)
-                .itemClickListener(new ItemClickListener<TestData>() {
+    @NotNull
+    @Override
+    public RecyclerAdapter getAdapter() {
+        return new RecyclerAdapter(getApplicationContext())
+                .newTypeSupport(Data0.class)
+                .layoutViewSupport(R.layout.item_data0_layout0)
+                .viewHolderClass(Data0Layout0ViewHolder.class)
+                .itemClickListener(new ItemClickListener<Data0>() {
                     @Override
-                    public void onItemClick(@NotNull ViewGroup parent, int position, @org.jetbrains.annotations.Nullable TestData testData) {
-                        UiUtil.showToast(JavaTestActivity.this, position + "" + testData.getName() + " clicked");
+                    public void onItemClick(@NotNull ViewGroup parent, int position, @org.jetbrains.annotations.Nullable Data0 data0) {
+                        UiUtil.showToast(JavaTestActivity.this, position + "" + data0.getName() + " clicked");
                     }
                 }).registerView().registerType();
-
-        rvList.setAdapter(mAdapter);
-        rvList.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
     }
 }

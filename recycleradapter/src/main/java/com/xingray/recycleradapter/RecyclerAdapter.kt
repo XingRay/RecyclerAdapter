@@ -8,12 +8,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerAdapter(context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
+class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
-    private val context = context
     internal val mItems: MutableList<Any> = mutableListOf()
-    private val mTypeSupportMap = mutableMapOf<Class<*>, TypeSupport<*>>()
-    private val mViewSupports = SparseArray<ViewSupport<out Any>>()
+    private val mTypeSupportMap = mutableMapOf<Class<*>, TypeSupport<*, out ViewHolder<out Any>>>()
+    private val mViewSupports = SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>()
 
     fun add(item: Any?) {
         add(mItems.size, item)
@@ -67,40 +66,69 @@ class RecyclerAdapter(context: Context) : RecyclerView.Adapter<ViewHolder<out An
         }
     }
 
-    fun <T : Any> newTypeSupport(cls: Class<T>): TypeSupport<T> {
-        return TypeSupport(context, cls, this)
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>)
+//            : RecyclerAdapter {
+//        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
+//    }
+//
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, itemClickListener: ItemClickListener<T>)
+//            : RecyclerAdapter {
+//        return addType(dataClass, holderClass, holderClass.layoutId, null, itemClickListener::onItemClick)
+//    }
+//
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, itemClickListener: (parent: ViewGroup, position: Int, t: T?) -> Unit)
+//            : RecyclerAdapter {
+//        return addType(dataClass, holderClass, holderClass.layoutId, null, itemClickListener)
+//    }
+//
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, initializer: Initializer<ViewHolder<T>>, itemClickListener: (parent: ViewGroup, position: Int, t: T?) -> Unit)
+//            : RecyclerAdapter {
+//        return addType(dataClass, holderClass, holderClass.layoutId, initializer::initialize, itemClickListener)
+//    }
+//
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, initializer: ((ViewHolder<T>) -> Unit)? = null, itemClickListener: ((parent: ViewGroup, position: Int, t: T?) -> Unit)? = null)
+//            : RecyclerAdapter {
+//        return addType(dataClass, holderClass, holderClass.layoutId, initializer, itemClickListener)
+//    }
+
+    inline fun <reified T : Any, VH : ViewHolder<T>> addType(holderClass: Class<VH>, layoutId: Int, noinline initializer: ((VH) -> Unit)?, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+        return addType(T::class.java, holderClass, layoutId, initializer, itemClickListener)
     }
 
-    fun <T : Any> addTypeSupport(cls: Class<T>, typeSupport: TypeSupport<T>) {
-        mTypeSupportMap[cls] = typeSupport
+    inline fun <reified T : Any, VH : ViewHolder<T>> addType(holderClass: Class<VH>, noinline initializer: ((VH) -> Unit)? = null, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+        return addType(T::class.java, holderClass, holderClass.layoutId, initializer, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addTypeSupport(cls: Class<T>, mapper: (T, Int) -> Class<out VH>)
-            : RecyclerAdapter {
-        val typeSupport = TypeSupport(context, cls, this)
-        mTypeSupportMap[cls] = typeSupport
-        return this
-    }
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+        val typeSupport: TypeSupport<T, VH> = newTypeSupport(dataClass)
 
-    fun <T : Any> addViewSupport(viewType: Int, viewSupport: ViewSupport<T>) {
-        mViewSupports.put(viewType, viewSupport)
-    }
-
-    inline fun <reified T : Any, VH : ViewHolder<T>> register(vhCls: Class<VH>, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
-        val annotation = vhCls.getAnnotation(LayoutId::class.java)
-                ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
-        return register(T::class.java, vhCls, annotation.layoutId, itemClickListener)
-    }
-
-    fun <T : Any, VH : ViewHolder<T>> register(cls: Class<T>, vhCls: Class<VH>, layoutId: Int, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
-        val typeSupport = TypeSupport(context, cls, this)
         val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(context), layoutId, 0, typeSupport)
-        if (itemClickListener != null) {
-            layoutViewSupport.itemClickListener(itemClickListener)
-        }
-        layoutViewSupport.viewHolderClass(vhCls)
-        layoutViewSupport.registerView().registerType()
+        layoutViewSupport.itemClickListener(itemClickListener)
+        layoutViewSupport.initializer(initializer)
+        layoutViewSupport.viewHolderClass(holderClass)
+
+        typeSupport.registerView(0, layoutViewSupport)
+        mTypeSupportMap[dataClass] = typeSupport
         return this
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
+            : RecyclerAdapter {
+        val typeSupport = TypeSupport(context, dataClass, this)
+        mTypeSupportMap[dataClass] = typeSupport
+        return this
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> newTypeSupport(dataClass: Class<T>): TypeSupport<T, VH> {
+        return TypeSupport(context, dataClass, this)
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addTypeSupport(dataClass: Class<T>, typeSupport: TypeSupport<T, VH>) {
+        mTypeSupportMap[dataClass] = typeSupport
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addViewSupport(viewType: Int, viewSupport: ViewSupport<T, VH>) {
+        mViewSupports.put(viewType, viewSupport)
     }
 
     override fun getItemViewType(position: Int): Int {

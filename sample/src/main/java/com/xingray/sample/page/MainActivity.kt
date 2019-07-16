@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.xingray.recycleradapter.ViewHolder
 import com.xingray.recycleradapter.RecyclerAdapter
+import com.xingray.recycleradapter.ViewHolder
 import com.xingray.sample.R
 
 class MainActivity : AppCompatActivity() {
@@ -29,8 +29,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         mAdapter?.update(listOf(
-                Test("recyclerview test") {
-                    RecyclerViewTestActivity.start(this)
+                Test("single type, show simple item") {
+                    SingleSimpleActivity.start(this)
+                },
+                Test("single type, listen item click") {
+                    SingleItemClickActivity.start(this)
+                },
+                Test("single type, item is selectable") {
+                    SingleItemSelectActivity.start(this)
                 },
                 Test("viewpager2 test") {
                     ViewPager2TestActivity.start(this)

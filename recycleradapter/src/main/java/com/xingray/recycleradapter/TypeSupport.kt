@@ -4,20 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-class TypeSupport<T : Any>(private val context: Context,
-                           private val cls: Class<T>,
-                           internal val adapter: RecyclerAdapter) {
+class TypeSupport<T : Any, VH : ViewHolder<T>>(private val context: Context,
+                                               private val dataClass: Class<T>,
+                                               internal val adapter: RecyclerAdapter) {
 
     private var mViewTypeMapper: ((T, Int) -> Int)? = null
     private var mDefaultViewType = UniqueId.get()
 
     fun registerType(): RecyclerAdapter {
-        adapter.addTypeSupport(cls, this)
+        adapter.addTypeSupport(dataClass, this)
         return adapter
     }
 
     fun getViewType(data: Any, position: Int): Int {
-        return if (cls.isAssignableFrom(data::class.java)) {
+        return if (dataClass.isAssignableFrom(data::class.java)) {
             @Suppress("UNCHECKED_CAST")
             val t: T = data as T
             mViewTypeMapper?.invoke(t, position) ?: mDefaultViewType
@@ -26,32 +26,32 @@ class TypeSupport<T : Any>(private val context: Context,
         }
     }
 
-    fun viewTypeMapper(mapper: (T, Int) -> Int): TypeSupport<T> {
+    fun viewTypeMapper(mapper: (T, Int) -> Int): TypeSupport<T, VH> {
         mViewTypeMapper = mapper
         return this
     }
 
-    fun viewTypeMapper(mapper: ViewTypeMapper<T>): TypeSupport<T> {
+    fun viewTypeMapper(mapper: ViewTypeMapper<T>): TypeSupport<T, VH> {
         mViewTypeMapper = mapper::getViewType
         return this
     }
 
-    fun layoutViewSupport(layoutId: Int): LayoutViewSupport<T> {
+    fun /*<VH : ViewHolder<T>>*/ layoutViewSupport(layoutId: Int): LayoutViewSupport<T, VH> {
         return layoutViewSupport(layoutId, 0)
     }
 
-    fun layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewSupport<T> {
+    fun /*<VH : ViewHolder<T>>*/ layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewSupport<T, VH> {
         return LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, this)
     }
 
-    fun <VH : ViewHolder<T>> viewSupport(layoutId: Int, cls: Class<VH>, viewType: Int = 0, listener: ((ViewGroup, Int, T) -> Unit)): TypeSupport<T> {
+    fun /*<VH : ViewHolder<T>> */viewSupport(layoutId: Int, holderClass: Class<out VH>, viewType: Int = 0, listener: ((ViewGroup, Int, T) -> Unit)): TypeSupport<T, VH> {
         return LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, this)
-                .viewHolderClass(cls)
+                .viewHolderClass(holderClass)
                 .itemClickListener(listener)
                 .registerView()
     }
 
-    fun registerView(viewType: Int, viewSupport: ViewSupport<T>) {
+    fun <T : Any, VH : ViewHolder<T>> registerView(viewType: Int, viewSupport: ViewSupport<T, VH>) {
         mDefaultViewType = viewType
         adapter.addViewSupport(viewType, viewSupport)
     }

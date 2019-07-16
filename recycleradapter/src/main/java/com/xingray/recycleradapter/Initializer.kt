@@ -8,6 +8,6 @@ package com.xingray.recycleradapter
  * email : leixing1012@qq.com
  *
  */
-interface ViewHolderInitializer {
-    fun initialize()
+interface Initializer<T> {
+    fun initialize(t: T)
 }

@@ -10,6 +10,6 @@ import android.view.View
  * email : leixing1012@qq.com
  *
  */
-interface ViewHolderFactory<T> {
-    fun createViewHolder(itemView: View): ViewHolder<T>
+interface ViewHolderFactory<VH> {
+    fun createViewHolder(itemView: View): VH
 }

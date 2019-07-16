@@ -2,15 +2,11 @@ package com.xingray.sample.page
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.xingray.recycleradapter.RecyclerAdapter
-import com.xingray.sample.R
-import com.xingray.sample.common.*
-import com.xingray.sample.util.showToast
+import com.xingray.sample.common.Data0
+import com.xingray.sample.common.Data0Layout0ViewHolder
+import com.xingray.sample.common.Data0Layout1ViewHolder
+import com.xingray.sample.common.ListActivity
 
 /**
  * xxx
@@ -21,7 +17,7 @@ import com.xingray.sample.util.showToast
  * mail : leixing@baidu.com
  *
  */
-class SimpleAPITestActivity : AppCompatActivity() {
+class SimpleAPITestActivity : ListActivity() {
     companion object {
         fun start(context: Context) {
             val starter = Intent(context, SimpleAPITestActivity::class.java)
@@ -29,50 +25,30 @@ class SimpleAPITestActivity : AppCompatActivity() {
         }
     }
 
-    private var mAdapter: RecyclerAdapter? = null
-    private var mRepository = DataRepository()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_api_test_activity)
-
-        val rvList: RecyclerView? = findViewById(R.id.rv_list)
-        if (rvList != null) {
-            initList(rvList)
-        }
-
-        loadData()
-    }
-
-
-    private fun loadData() {
+    override fun loadData(): List<Any> {
         val list = mutableListOf<Any>()
-        list.addAll(mRepository.loadData())
+        list.addAll(mRepository.loadData0())
         list.addAll(mRepository.loadData1())
         list.shuffle()
 
-        mAdapter?.addAll(list)
+        return list
     }
 
-    private fun initList(rvList: RecyclerView) {
-        rvList.layoutManager = LinearLayoutManager(applicationContext)
-
-        mAdapter = RecyclerAdapter(applicationContext)
-                .addTypeSupport(TestData::class.java) { _, position ->
+    override fun getAdapter(): RecyclerAdapter {
+        return RecyclerAdapter(applicationContext)
+                .addType(Data0::class.java) { _, position ->
                     if (position % 2 == 0) {
-                        return@addTypeSupport TestViewHolder::class.java
+                        return@addType Data0Layout0ViewHolder::class.java
                     } else {
-                        return@addTypeSupport TestViewHolder1::class.java
+                        return@addType Data0Layout1ViewHolder::class.java
                     }
                 }
-                .register(TestViewHolder::class.java) { _, position, t ->
-                    showToast("$position ${t.name} clicked layout0")
-                }.register(TestViewHolder1::class.java) { _, position, t ->
-                    showToast("$position ${t.name} clicked layout1")
-                }.register(TestData1ViewHolder::class.java) { _, position, t ->
-                    showToast("$position ${t.name} ${t.size} clicked TestData1")
-                }
-        rvList.adapter = mAdapter
-        rvList.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
+//                .addType(Data0Layout0ViewHolder::class.java, null) { _, position, t ->
+//                    showToast("$position ${t.name} clicked layout0")
+//                }.addType(Data0Layout1ViewHolder::class.java, null) { _, position, t ->
+//                    showToast("$position ${t.name} clicked layout1")
+//                }.addType(Data1Layout0ViewHolder::class.java, null) { _, position, t ->
+//                    showToast("$position ${t.name} ${t.size} clicked Data1")
+//                }
     }
 }

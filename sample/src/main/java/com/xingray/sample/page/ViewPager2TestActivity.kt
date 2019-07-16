@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.xingray.recycleradapter.RecyclerAdapter
 import com.xingray.sample.R
+import com.xingray.sample.common.Data0
+import com.xingray.sample.common.Data0Layout0ViewHolder
 import com.xingray.sample.common.DataRepository
-import com.xingray.sample.common.TestData
-import com.xingray.sample.common.TestViewHolder
 import com.xingray.sample.util.showToast
 
 class ViewPager2TestActivity : AppCompatActivity() {
@@ -37,16 +37,16 @@ class ViewPager2TestActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        mAdapter?.update(mRepository.loadData())
+        mAdapter?.update(mRepository.loadData0())
     }
 
     private fun initPager(vpPager: ViewPager2) {
         vpPager.orientation = ViewPager2.ORIENTATION_VERTICAL
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .newTypeSupport(TestData::class.java)
+                .newTypeSupport(Data0::class.java)
                 .layoutViewSupport(R.layout.item_view_pager2_test_list)
-                .viewHolderClass(TestViewHolder::class.java)
+                .viewHolderClass(Data0Layout0ViewHolder::class.java)
                 .itemClickListener { _, position, t ->
                     showToast("$position ${t.name} clicked")
                 }.registerView().registerType()

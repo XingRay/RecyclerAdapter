@@ -4,31 +4,23 @@ import android.graphics.Color
 import kotlin.random.Random
 
 class DataRepository {
-    fun loadData(): List<TestData> {
-        val list = mutableListOf<TestData>()
-        val r = Random(System.currentTimeMillis())
-        val colors = arrayOf(
-                Color.RED,
-                Color.GREEN,
-                Color.BLUE,
-                Color.YELLOW,
-                Color.CYAN,
-                Color.MAGENTA)
-        var value = -1
-        for (i in 0 until 100) {
-            var randomInt = r.nextInt(colors.size)
-            if (randomInt == value) {
-                randomInt = (randomInt + 1) % colors.size
-            }
-            value = randomInt
-            list.add(TestData("test data $i", colors[randomInt]))
+    companion object {
+        private const val DATA0_COUNT = 100
+        private const val DATA1_COUNT = 100
+    }
+
+
+    fun loadData0(): List<Data0> {
+        val list = mutableListOf<Data0>()
+        for (i in 0 until DATA0_COUNT) {
+            list.add(Data0("test data $i", Color.WHITE))
         }
 
         return list
     }
 
-    fun loadData1(): List<TestData1> {
-        val list = mutableListOf<TestData1>()
+    fun loadData1(): List<Data1> {
+        val list = mutableListOf<Data1>()
         val r = Random(System.currentTimeMillis())
         val size = arrayOf(
                 16.0f,
@@ -45,13 +37,13 @@ class DataRepository {
         )
         var value = -1
 
-        for (i in 0 until 100) {
+        for (i in 0 until DATA1_COUNT) {
             var randomInt = r.nextInt(size.size)
             if (randomInt == value) {
                 randomInt = (randomInt + 1) % size.size
             }
             value = randomInt
-            list.add(TestData1(1, "test data $i", size[randomInt]))
+            list.add(Data1("test data $i", size[randomInt], Color.GRAY))
         }
 
         return list
