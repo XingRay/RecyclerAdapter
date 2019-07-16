@@ -3,12 +3,15 @@ package com.xingray.sample.page
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.xingray.recycleradapter.LayoutId
 import com.xingray.recycleradapter.RecyclerAdapter
+import com.xingray.recycleradapter.ViewHolder
 import com.xingray.sample.R
 import com.xingray.sample.common.Data0
-import com.xingray.sample.common.Data0Layout0ViewHolder
 import com.xingray.sample.common.DataRepository
 import com.xingray.sample.util.showToast
 
@@ -44,13 +47,19 @@ class ViewPager2TestActivity : AppCompatActivity() {
         vpPager.orientation = ViewPager2.ORIENTATION_VERTICAL
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .newTypeSupport(Data0::class.java)
-                .layoutViewSupport(R.layout.item_view_pager2_test_list)
-                .viewHolderClass(Data0Layout0ViewHolder::class.java)
-                .itemClickListener { _, position, t ->
+                .addType(PagerViewHolder::class.java, null) { _, position, t ->
                     showToast("$position ${t.name} clicked")
-                }.registerView().registerType()
+                }
 
         vpPager.adapter = mAdapter
+    }
+
+    @LayoutId(R.layout.item_pager)
+    class PagerViewHolder(itemView: View) : ViewHolder<Data0>(itemView) {
+        private val tvText: TextView = itemView.findViewById(R.id.tv_text)
+
+        override fun bindItemView(t: Data0, position: Int) {
+            tvText.text = t.name
+        }
     }
 }

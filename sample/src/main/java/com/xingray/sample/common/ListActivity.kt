@@ -14,13 +14,13 @@ import com.xingray.sample.R
  * @author : leixing
  * @date : 2019/7/16 10:49
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 abstract class ListActivity : Activity() {
 
-    var mAdapter: RecyclerAdapter? = null
-    var mRepository = DataRepository()
+    var adapter: RecyclerAdapter? = null
+    var repository = DataRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +31,14 @@ abstract class ListActivity : Activity() {
             rvList.layoutManager = LinearLayoutManager(applicationContext)
             rvList.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
 
-            mAdapter = getAdapter()
-            rvList.adapter = mAdapter
+            adapter = createAdapter()
+            rvList.adapter = adapter
         }
 
-        mAdapter?.update(loadData())
+        adapter?.update(loadData())
     }
 
     abstract fun loadData(): List<Any>
 
-    abstract fun getAdapter(): RecyclerAdapter
+    abstract fun createAdapter(): RecyclerAdapter
 }

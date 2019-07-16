@@ -13,7 +13,7 @@ import com.xingray.sample.R
  * @author : leixing
  * @date : 2019/7/16 18:31
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 @LayoutId(R.layout.item_data1_layout1)

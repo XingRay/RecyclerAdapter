@@ -5,64 +5,66 @@ package com.xingray.recycleradapter
 import android.content.Context
 import android.util.SparseArray
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
-    internal val mItems by lazy { mutableListOf<Any>() }
-    private val mTypeSupportMap by lazy { mutableMapOf<Class<*>, TypeSupport<*, out ViewHolder<out Any>>>() }
-    private val mViewSupports by lazy { SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>() }
-    private val mViewTypeMap by lazy { mutableMapOf<Class<*>, Int>() }
+    internal val items by lazy { mutableListOf<Any>() }
+    private val viewTypeMappers by lazy { mutableMapOf<Class<out Any>, (Any, Int) -> Int>() }
+    private val viewSupports by lazy { SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>() }
+    private val viewTypeMap by lazy { mutableMapOf<Class<*>, Int>() }
 
     fun add(item: Any?) {
-        add(mItems.size, item)
+        add(items.size, item)
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun add(index: Int, item: Any?) {
-        if (mItems.add(index, item)) {
+        if (items.add(index, item)) {
             notifyItemInserted(index)
         }
     }
 
     fun addAll(list: List<Any>?) {
-        addAll(mItems.size, list)
+        addAll(items.size, list)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun addAll(start: Int, items: List<Any>?) {
-        if (this.mItems.addAll(start, items)) {
+        if (this.items.addAll(start, items)) {
             notifyItemRangeInserted(start, items?.size ?: 0)
         }
     }
 
     fun remove(position: Int) {
-        if (mItems.remove(position)) {
+        if (items.remove(position)) {
             notifyItemRemoved(position)
         }
     }
 
     fun remove(position: Int, count: Int) {
-        if (mItems.remove(position, count) != null) {
+        if (items.remove(position, count) != null) {
             notifyItemRangeRemoved(position, count)
         }
     }
 
     fun update(list: List<Any>?) {
-        if (mItems.update(list)) {
+        if (items.update(list)) {
             notifyDataSetChanged()
         }
     }
 
     fun clear() {
         val count = itemCount
-        if (mItems.removeAll()) {
+        if (items.removeAll()) {
             notifyItemRangeRemoved(0, count)
         }
     }
 
     fun moveItem(from: Int, to: Int) {
-        if (mItems.move(from, to)) {
+        if (items.move(from, to)) {
             notifyItemMoved(from, to)
         }
     }
@@ -101,58 +103,76 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
     }
 
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
-        val typeSupport: TypeSupport<T, VH> = newTypeSupport(dataClass)
         val viewType = getViewType(holderClass)
-        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, typeSupport)
-        layoutViewSupport.itemClickListener(itemClickListener)
-        layoutViewSupport.initializer(initializer)
-        layoutViewSupport.viewHolderClass(holderClass)
+        val viewTypeMapper: ((t: T, position: Int) -> Int) = { _, _ -> viewType }
 
-        typeSupport.registerView(viewType, layoutViewSupport)
-        mTypeSupportMap[dataClass] = typeSupport
+        val viewSupport = ViewSupport(this, {
+            LayoutInflater.from(context).inflate(layoutId, it, false)
+        }, {
+            val constructor = holderClass.getConstructor(View::class.java)
+            constructor.isAccessible = true
+            @Suppress("UNCHECKED_CAST")
+            return@ViewSupport constructor.newInstance(it)
+        })
+        viewSupport.itemClickListener(itemClickListener)
+        viewSupport.initializer(initializer)
+
+        addViewSupport(viewType, viewSupport)
+        addViewTypeMapper(dataClass, viewTypeMapper)
         return this
     }
 
     private fun <VH> getViewType(holderClass: Class<VH>): Int {
-        var viewType: Int? = mViewTypeMap[holderClass]
+        var viewType: Int? = viewTypeMap[holderClass]
         if (viewType == null) {
             viewType = UniqueId.get()
-            mViewTypeMap[holderClass] = viewType
+            viewTypeMap[holderClass] = viewType
         }
         return viewType
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
-            : RecyclerAdapter {
-        val typeSupport = TypeSupport(context, dataClass, this)
-        mTypeSupportMap[dataClass] = typeSupport
-        return this
+//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
+//            : RecyclerAdapter {
+//        val typeSupport = TypeSupport(context, dataClass, this)
+//        viewTypeMappers[dataClass] = typeSupport
+//        return this
+//    }
+//
+//    fun <T : Any, VH : ViewHolder<T>> newTypeSupport(dataClass: Class<T>): TypeSupport<T> {
+//        return TypeSupport(context, dataClass, this)
+//    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun <T : Any, VH : ViewHolder<T>> addViewTypeMapper(dataClass: Class<T>, viewTypeMapper: (T, Int) -> Int) {
+        viewTypeMappers[dataClass] = { t, position ->
+            if (!t.javaClass.isAssignableFrom(dataClass)) {
+                throw IllegalStateException("wrong type of data, " +
+                        "${dataClass.canonicalName} required, " +
+                        "${t.javaClass.canonicalName} found")
+            }
+            @Suppress("UNCHECKED_CAST")
+            viewTypeMapper.invoke(t as T, position)
+        }
     }
 
-    fun <T : Any, VH : ViewHolder<T>> newTypeSupport(dataClass: Class<T>): TypeSupport<T, VH> {
-        return TypeSupport(context, dataClass, this)
-    }
-
-    fun <T : Any, VH : ViewHolder<T>> addTypeSupport(dataClass: Class<T>, typeSupport: TypeSupport<T, VH>) {
-        mTypeSupportMap[dataClass] = typeSupport
-    }
-
+    @Suppress("MemberVisibilityCanBePrivate")
     fun <T : Any, VH : ViewHolder<T>> addViewSupport(viewType: Int, viewSupport: ViewSupport<T, VH>) {
-        mViewSupports.put(viewType, viewSupport)
+        viewSupports.put(viewType, viewSupport)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val itemData = mItems[position]
-        val typeSupport = mTypeSupportMap[itemData::class.java]
-        return typeSupport?.getViewType(itemData, position) ?: 0
+        val itemData = items[position]
+        val viewTypeMapper = viewTypeMappers[itemData::class.java]
+        viewTypeMapper ?: throw IllegalStateException("unsupported type, data:$itemData")
+        return viewTypeMapper.invoke(itemData, position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<out Any> {
-        return mViewSupports.get(viewType).onCreateViewHolder(parent)
+        return viewSupports.get(viewType).onCreateViewHolder(parent)
     }
 
     override fun getItemCount(): Int {
-        return mItems.size
+        return items.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int, payloads: List<Any>) {
@@ -164,14 +184,7 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int) {
-        val t = mItems[position]
+        val t = items[position]
         holder.onBindItemView(t, position)
     }
 }
-
-val <VH> Class<VH>.layoutId: Int
-    get() {
-        val annotation = getAnnotation(LayoutId::class.java)
-                ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
-        return annotation.layoutId
-    }

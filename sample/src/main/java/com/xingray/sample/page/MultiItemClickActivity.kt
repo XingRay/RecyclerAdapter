@@ -14,7 +14,7 @@ import com.xingray.sample.util.showToast
  * @author : leixing
  * @date : 2019/6/5 21:25
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class MultiItemClickActivity : ListActivity() {
@@ -26,10 +26,10 @@ class MultiItemClickActivity : ListActivity() {
     }
 
     override fun loadData(): List<Any> {
-        return mRepository.loadData()
+        return repository.loadData()
     }
 
-    override fun getAdapter(): RecyclerAdapter {
+    override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
                 .addType(Data0Layout0ViewHolder::class.java, null) { _, position, t ->
                     showToast("position:$position , name:${t.name}")

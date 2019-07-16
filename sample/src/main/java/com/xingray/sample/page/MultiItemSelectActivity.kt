@@ -13,7 +13,7 @@ import com.xingray.sample.common.ListActivity
  * @author : leixing
  * @date : 2019/7/16 18:20
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class MultiItemSelectActivity : ListActivity() {
@@ -25,23 +25,23 @@ class MultiItemSelectActivity : ListActivity() {
         }
     }
 
-    override fun getAdapter(): RecyclerAdapter {
+    override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
                 .addType(Data0Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { data0, position ->
                         data0.selected = !data0.selected
-                        mAdapter?.notifyItemChanged(position, data0.selected)
+                        adapter?.notifyItemChanged(position, data0.selected)
                     }
                 }, null)
                 .addType(Data1Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { data1, position ->
                         data1.selected = !data1.selected
-                        mAdapter?.notifyItemChanged(position, data1.selected)
+                        adapter?.notifyItemChanged(position, data1.selected)
                     }
                 }, null)
     }
 
     override fun loadData(): List<Any> {
-        return mRepository.loadData()
+        return repository.loadData()
     }
 }

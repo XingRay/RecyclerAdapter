@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * @author : leixing
  * @date : 2019/6/5 21:06
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 object UniqueId {

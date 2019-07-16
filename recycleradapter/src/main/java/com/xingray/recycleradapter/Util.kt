@@ -30,7 +30,7 @@ private fun Iterable<*>?.isOutOfIndex(index: Int): Boolean {
     return index < 0 || index >= this.getSize()
 }
 
-fun <T> List<T>?.move(fromIndex: Int, toIndex: Int): Boolean {
+fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int): Boolean {
     if (isOutOfIndex(fromIndex)) {
         return false
     }
@@ -121,3 +121,11 @@ fun <T> MutableList<T>.remove(position: Int): Boolean {
         false
     }
 }
+
+//fun <T, VH : ViewHolder<T>> RecyclerAdapter.layoutViewSupport(holderClass: Class<VH>): LayoutViewFactory<T, VH> {
+//    return layoutViewSupport(holderClass.layoutId, adapter.getViewType(holderClass))
+//}
+//
+//fun <T, VH : ViewHolder<T>> layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewFactory<T, VH> {
+//    return LayoutViewFactory(LayoutInflater.from(context), layoutId, viewType, this)
+//}

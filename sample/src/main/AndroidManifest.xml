@@ -24,6 +24,7 @@
         <activity android:name=".page.SingleSimpleActivity" />
         <activity android:name=".page.SingleItemSelectActivity" />
         <activity android:name=".page.MultiItemSelectActivity" />
+        <activity android:name=".page.MultiLayoutSimpleActivity" />
     </application>
 
 </manifest>

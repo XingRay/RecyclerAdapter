@@ -17,10 +17,10 @@ class SingleItemClickActivity : ListActivity() {
     }
 
     override fun loadData(): List<Any> {
-        return mRepository.loadData0()
+        return repository.loadData0()
     }
 
-    override fun getAdapter(): RecyclerAdapter {
+    override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
                 .addType(Data0Layout0ViewHolder::class.java, null) { _, position, t ->
                     showToast("position:$position , name:${t.name}")

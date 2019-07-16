@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.xingray.recycleradapter.LayoutId
 import com.xingray.recycleradapter.RecyclerAdapter
 import com.xingray.recycleradapter.ViewHolder
 import com.xingray.sample.R
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         mAdapter?.update(listOf(
-                Test("single type, show simple item") {
+                Test("single type, show simple items") {
                     SingleSimpleActivity.start(this)
                 },
                 Test("single type, listen item click") {
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 Test("single type, item is selectable") {
                     SingleItemSelectActivity.start(this)
                 },
-                Test("multi type, show simple item") {
+                Test("multi type, show simple items") {
                     MultiSimpleActivity.start(this)
                 },
                 Test("multi type, listen item click") {
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity() {
                 },
                 Test("multi type, item is selectable") {
                     MultiItemSelectActivity.start(this)
+                },
+                Test("multi layout, show simple items") {
+                    MultiLayoutSimpleActivity.start(this)
                 },
                 Test("viewpager2 test") {
                     ViewPager2TestActivity.start(this)
@@ -60,11 +64,9 @@ class MainActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .newTypeSupport(Test::class.java)
-                .viewSupport(R.layout.item_main_list, TestViewHolder::class.java) { _, _, t ->
+                .addType(TestViewHolder::class.java, null) { _, _, t ->
                     t.starter.invoke()
                 }
-                .registerType()
 
         rvList.adapter = mAdapter
         rvList.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
@@ -72,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private data class Test(val name: String, val starter: () -> Unit)
 
+    @LayoutId(R.layout.item_main_list)
     private class TestViewHolder(itemView: View) : ViewHolder<Test>(itemView) {
 
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)

@@ -17,10 +17,10 @@ class MultiSimpleActivity : ListActivity() {
     }
 
     override fun loadData(): List<Any> {
-        return mRepository.loadData()
+        return repository.loadData()
     }
 
-    override fun getAdapter(): RecyclerAdapter {
+    override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
                 .addType(Data0Layout0ViewHolder::class.java)
                 .addType(Data1Layout0ViewHolder::class.java)

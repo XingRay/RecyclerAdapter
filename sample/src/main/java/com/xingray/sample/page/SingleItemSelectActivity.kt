@@ -12,7 +12,7 @@ import com.xingray.sample.common.ListActivity
  * @author : leixing
  * @date : 2019/7/16 13:22
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class SingleItemSelectActivity : ListActivity() {
@@ -24,17 +24,17 @@ class SingleItemSelectActivity : ListActivity() {
         }
     }
 
-    override fun getAdapter(): RecyclerAdapter {
+    override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
                 .addType(Data0Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { t, position ->
                         t.selected = !t.selected
-                        mAdapter?.notifyItemChanged(position, t.selected)
+                        adapter?.notifyItemChanged(position, t.selected)
                     }
                 }, null)
     }
 
     override fun loadData(): List<Any> {
-        return mRepository.loadData0()
+        return repository.loadData0()
     }
 }
