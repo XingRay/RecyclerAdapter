@@ -19,10 +19,11 @@
         <activity android:name=".page.SingleItemClickActivity" />
         <activity android:name=".page.ViewPager2TestActivity" />
         <activity android:name=".page.JavaTestActivity" />
-        <activity android:name=".page.MultiLayoutTestActivity" />
-        <activity android:name=".page.SimpleAPITestActivity" />
+        <activity android:name=".page.MultiSimpleActivity" />
+        <activity android:name=".page.MultiItemClickActivity" />
         <activity android:name=".page.SingleSimpleActivity" />
         <activity android:name=".page.SingleItemSelectActivity" />
+        <activity android:name=".page.MultiItemSelectActivity" />
     </application>
 
 </manifest>

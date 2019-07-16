@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
-    internal val mItems: MutableList<Any> = mutableListOf()
-    private val mTypeSupportMap = mutableMapOf<Class<*>, TypeSupport<*, out ViewHolder<out Any>>>()
-    private val mViewSupports = SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>()
+    internal val mItems by lazy { mutableListOf<Any>() }
+    private val mTypeSupportMap by lazy { mutableMapOf<Class<*>, TypeSupport<*, out ViewHolder<out Any>>>() }
+    private val mViewSupports by lazy { SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>() }
+    private val mViewTypeMap by lazy { mutableMapOf<Class<*>, Int>() }
 
     fun add(item: Any?) {
         add(mItems.size, item)
@@ -30,7 +31,7 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun addAll(start: Int, items: List<Any>?) {
-        if (mItems.addAll(start, items)) {
+        if (this.mItems.addAll(start, items)) {
             notifyItemRangeInserted(start, items?.size ?: 0)
         }
     }
@@ -101,15 +102,24 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
 
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
         val typeSupport: TypeSupport<T, VH> = newTypeSupport(dataClass)
-
-        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(context), layoutId, 0, typeSupport)
+        val viewType = getViewType(holderClass)
+        val layoutViewSupport = LayoutViewSupport(LayoutInflater.from(context), layoutId, viewType, typeSupport)
         layoutViewSupport.itemClickListener(itemClickListener)
         layoutViewSupport.initializer(initializer)
         layoutViewSupport.viewHolderClass(holderClass)
 
-        typeSupport.registerView(0, layoutViewSupport)
+        typeSupport.registerView(viewType, layoutViewSupport)
         mTypeSupportMap[dataClass] = typeSupport
         return this
+    }
+
+    private fun <VH> getViewType(holderClass: Class<VH>): Int {
+        var viewType: Int? = mViewTypeMap[holderClass]
+        if (viewType == null) {
+            viewType = UniqueId.get()
+            mViewTypeMap[holderClass] = viewType
+        }
+        return viewType
     }
 
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
@@ -158,3 +168,10 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
         holder.onBindItemView(t, position)
     }
 }
+
+val <VH> Class<VH>.layoutId: Int
+    get() {
+        val annotation = getAnnotation(LayoutId::class.java)
+                ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
+        return annotation.layoutId
+    }

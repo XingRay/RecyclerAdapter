@@ -121,10 +121,3 @@ fun <T> MutableList<T>.remove(position: Int): Boolean {
         false
     }
 }
-
-val <VH> Class<VH>.layoutId: Int
-    get() {
-        val annotation = getAnnotation(LayoutId::class.java)
-                ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
-        return annotation.layoutId
-    }

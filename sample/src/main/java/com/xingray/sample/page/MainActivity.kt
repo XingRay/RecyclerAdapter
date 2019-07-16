@@ -38,17 +38,20 @@ class MainActivity : AppCompatActivity() {
                 Test("single type, item is selectable") {
                     SingleItemSelectActivity.start(this)
                 },
+                Test("multi type, show simple item") {
+                    MultiSimpleActivity.start(this)
+                },
+                Test("multi type, listen item click") {
+                    MultiItemClickActivity.start(this)
+                },
+                Test("multi type, item is selectable") {
+                    MultiItemSelectActivity.start(this)
+                },
                 Test("viewpager2 test") {
                     ViewPager2TestActivity.start(this)
                 },
                 Test("java test") {
                     JavaTestActivity.start(this)
-                },
-                Test("multi layout test") {
-                    MultiLayoutTestActivity.start(this)
-                },
-                Test("simple api test") {
-                    SimpleAPITestActivity.start(this)
                 }
         ))
     }
