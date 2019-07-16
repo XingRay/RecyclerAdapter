@@ -131,12 +131,12 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
         return viewType
     }
 
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
-//            : RecyclerAdapter {
-//        val typeSupport = TypeSupport(context, dataClass, this)
-//        viewTypeMappers[dataClass] = typeSupport
-//        return this
-//    }
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, mapper: (T, Int) -> Class<out VH>)
+            : RecyclerAdapter {
+        val typeSupport = TypeSupport(context, dataClass, this)
+        viewTypeMappers[dataClass] = typeSupport
+        return this
+    }
 //
 //    fun <T : Any, VH : ViewHolder<T>> newTypeSupport(dataClass: Class<T>): TypeSupport<T> {
 //        return TypeSupport(context, dataClass, this)

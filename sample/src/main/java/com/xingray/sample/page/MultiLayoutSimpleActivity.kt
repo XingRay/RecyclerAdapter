@@ -23,7 +23,9 @@ class MultiLayoutSimpleActivity : ListActivity() {
     }
 
     override fun createAdapter(): RecyclerAdapter {
-        return RecyclerAdapter(applicationContext)
+        val recyclerAdapter = RecyclerAdapter(applicationContext)
+
+        return recyclerAdapter
     }
 
     override fun loadData(): List<Any> {
