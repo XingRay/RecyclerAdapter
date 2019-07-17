@@ -16,15 +16,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".page.SingleItemClickActivity" />
+        <activity android:name=".page.onetype.OneTypeItemClickActivity" />
         <activity android:name=".page.ViewPager2TestActivity" />
         <activity android:name=".page.JavaTestActivity" />
-        <activity android:name=".page.MultiSimpleActivity" />
-        <activity android:name=".page.MultiItemClickActivity" />
-        <activity android:name=".page.SingleSimpleActivity" />
-        <activity android:name=".page.SingleItemSelectActivity" />
-        <activity android:name=".page.MultiItemSelectActivity" />
-        <activity android:name=".page.MultiLayoutSimpleActivity" />
+        <activity android:name=".page.multitype.MultiTypeSimpleActivity" />
+        <activity android:name=".page.multitype.MultiTypeItemClickActivity" />
+        <activity android:name=".page.onetype.OneTypeSimpleActivity" />
+        <activity android:name=".page.onetype.OneTypeItemSelectActivity" />
+        <activity android:name=".page.multitype.MultiTypeItemSelectActivity" />
+        <activity android:name=".page.onetypemultilayout.OneTypeMultiLayoutSimpleActivity" />
+        <activity android:name=".page.onetypemultilayout.OneTypeMultiLayoutItemClickActivity" />
+        <activity android:name=".page.onetypemultilayout.OneTypeMultiLayoutItemSelectActivity" />
+        <activity android:name=".page.multitypemultilayout.MultiTypeMultiLayoutSimpleActivity" />
+        <activity android:name=".page.multitypemultilayout.MultiTypeMultiLayoutItemClickActivity" />
+        <activity android:name=".page.multitypemultilayout.MultiTypeMultiLayoutItemSelectActivity" />
     </application>
 
 </manifest>

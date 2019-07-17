@@ -1,33 +1,37 @@
-package com.xingray.sample.page
+package com.xingray.sample.page.onetype
 
 import android.app.Activity
 import android.content.Intent
 import com.xingray.recycleradapter.RecyclerAdapter
-import com.xingray.sample.common.Data0Layout0ViewHolder
+import com.xingray.sample.common.Data0Layout1ViewHolder
 import com.xingray.sample.common.ListActivity
-
 
 /**
  * xxx
  *
  * @author : leixing
- * @date : 2019/7/16 12:35
+ * @date : 2019/7/16 13:22
  * @version : 1.0.0
  * mail : leixing1012@qq.com
  *
  */
-class SingleSimpleActivity : ListActivity() {
+class OneTypeItemSelectActivity : ListActivity() {
 
     companion object {
         fun start(activity: Activity) {
-            val starter = Intent(activity.applicationContext, SingleSimpleActivity::class.java)
+            val starter = Intent(activity.applicationContext, OneTypeItemSelectActivity::class.java)
             activity.startActivity(starter)
         }
     }
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addType(Data0Layout0ViewHolder::class.java)
+                .addType(Data0Layout1ViewHolder::class.java, {
+                    it.selectOnClickListener { t, position ->
+                        t.selected = !t.selected
+                        adapter?.notifyItemChanged(position, t.selected)
+                    }
+                }, null)
     }
 
     override fun loadData(): List<Any> {

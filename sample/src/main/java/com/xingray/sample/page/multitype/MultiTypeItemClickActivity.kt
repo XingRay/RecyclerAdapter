@@ -1,4 +1,4 @@
-package com.xingray.sample.page
+package com.xingray.sample.page.multitype
 
 import android.content.Context
 import android.content.Intent
@@ -17,10 +17,10 @@ import com.xingray.sample.util.showToast
  * mail : leixing1012@qq.com
  *
  */
-class MultiItemClickActivity : ListActivity() {
+class MultiTypeItemClickActivity : ListActivity() {
     companion object {
         fun start(context: Context) {
-            val starter = Intent(context, MultiItemClickActivity::class.java)
+            val starter = Intent(context, MultiTypeItemClickActivity::class.java)
             context.startActivity(starter)
         }
     }

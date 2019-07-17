@@ -1,4 +1,4 @@
-package com.xingray.sample.page
+package com.xingray.sample.page.onetype
 
 import android.content.Context
 import android.content.Intent
@@ -7,11 +7,11 @@ import com.xingray.sample.common.Data0Layout0ViewHolder
 import com.xingray.sample.common.ListActivity
 import com.xingray.sample.util.showToast
 
-class SingleItemClickActivity : ListActivity() {
+class OneTypeItemClickActivity : ListActivity() {
 
     companion object {
         fun start(context: Context) {
-            val starter = Intent(context, SingleItemClickActivity::class.java)
+            val starter = Intent(context, OneTypeItemClickActivity::class.java)
             context.startActivity(starter)
         }
     }

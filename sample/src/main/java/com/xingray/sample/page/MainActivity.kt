@@ -11,6 +11,18 @@ import com.xingray.recycleradapter.LayoutId
 import com.xingray.recycleradapter.RecyclerAdapter
 import com.xingray.recycleradapter.ViewHolder
 import com.xingray.sample.R
+import com.xingray.sample.page.multitype.MultiTypeItemClickActivity
+import com.xingray.sample.page.multitype.MultiTypeItemSelectActivity
+import com.xingray.sample.page.multitype.MultiTypeSimpleActivity
+import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutItemClickActivity
+import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutItemSelectActivity
+import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutSimpleActivity
+import com.xingray.sample.page.onetype.OneTypeItemClickActivity
+import com.xingray.sample.page.onetype.OneTypeItemSelectActivity
+import com.xingray.sample.page.onetype.OneTypeSimpleActivity
+import com.xingray.sample.page.onetypemultilayout.OneTypeMultiLayoutItemClickActivity
+import com.xingray.sample.page.onetypemultilayout.OneTypeMultiLayoutItemSelectActivity
+import com.xingray.sample.page.onetypemultilayout.OneTypeMultiLayoutSimpleActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,26 +42,41 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
         mAdapter?.update(listOf(
-                Test("single type, show simple items") {
-                    SingleSimpleActivity.start(this)
+                Test("one type, show simple items") {
+                    OneTypeSimpleActivity.start(this)
                 },
-                Test("single type, listen item click") {
-                    SingleItemClickActivity.start(this)
+                Test("one type, listen item click") {
+                    OneTypeItemClickActivity.start(this)
                 },
-                Test("single type, item is selectable") {
-                    SingleItemSelectActivity.start(this)
+                Test("one type, item is selectable") {
+                    OneTypeItemSelectActivity.start(this)
                 },
                 Test("multi type, show simple items") {
-                    MultiSimpleActivity.start(this)
+                    MultiTypeSimpleActivity.start(this)
                 },
                 Test("multi type, listen item click") {
-                    MultiItemClickActivity.start(this)
+                    MultiTypeItemClickActivity.start(this)
                 },
                 Test("multi type, item is selectable") {
-                    MultiItemSelectActivity.start(this)
+                    MultiTypeItemSelectActivity.start(this)
                 },
-                Test("multi layout, show simple items") {
-                    MultiLayoutSimpleActivity.start(this)
+                Test("one type multi layout, show simple items") {
+                    OneTypeMultiLayoutSimpleActivity.start(this)
+                },
+                Test("one type multi layout, listen item click") {
+                    OneTypeMultiLayoutItemClickActivity.start(this)
+                },
+                Test("one type multi layout, item is selectable") {
+                    OneTypeMultiLayoutItemSelectActivity.start(this)
+                },
+                Test("multi type multi layout, show simple items") {
+                    MultiTypeMultiLayoutSimpleActivity.start(this)
+                },
+                Test("multi type multi layout, listen item click") {
+                    MultiTypeMultiLayoutItemClickActivity.start(this)
+                },
+                Test("multi type multi layout, item is selectable") {
+                    MultiTypeMultiLayoutItemSelectActivity.start(this)
                 },
                 Test("viewpager2 test") {
                     ViewPager2TestActivity.start(this)

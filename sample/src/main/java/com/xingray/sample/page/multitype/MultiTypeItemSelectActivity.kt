@@ -1,4 +1,4 @@
-package com.xingray.sample.page
+package com.xingray.sample.page.multitype
 
 import android.app.Activity
 import android.content.Intent
@@ -16,11 +16,11 @@ import com.xingray.sample.common.ListActivity
  * mail : leixing1012@qq.com
  *
  */
-class MultiItemSelectActivity : ListActivity() {
+class MultiTypeItemSelectActivity : ListActivity() {
 
     companion object {
         fun start(activity: Activity) {
-            val starter = Intent(activity.applicationContext, MultiItemSelectActivity::class.java)
+            val starter = Intent(activity.applicationContext, MultiTypeItemSelectActivity::class.java)
             activity.startActivity(starter)
         }
     }
