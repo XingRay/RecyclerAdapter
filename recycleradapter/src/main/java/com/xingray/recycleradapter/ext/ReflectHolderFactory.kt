@@ -9,7 +9,7 @@ import com.xingray.recycleradapter.HolderFactory
  * @author : leixing
  * @date : 2019/7/17 9:16
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class ReflectHolderFactory<VH>(private val holderClass: Class<VH>) : HolderFactory<VH> {

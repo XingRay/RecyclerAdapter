@@ -11,7 +11,7 @@ import com.xingray.sample.common.*
  * @author : leixing
  * @date : 2019/7/17 10:00
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class MultiTypeMultiLayoutItemSelectActivity : ListActivity() {

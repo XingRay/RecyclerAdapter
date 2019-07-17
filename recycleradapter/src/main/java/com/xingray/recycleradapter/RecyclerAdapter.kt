@@ -70,7 +70,7 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
         }
     }
 
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>)
+    //    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>)
 //            : RecyclerAdapter {
 //        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
 //    }
@@ -125,6 +125,10 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
             viewTypeMap[holderClass] = viewType
         }
         return viewType
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addViewTypeMapper(dataClass: Class<T>, mapper: ViewTypeMapper<T>): RecyclerAdapter {
+        return addViewTypeMapper(dataClass, mapper::getViewType)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

@@ -15,7 +15,7 @@ import com.xingray.sample.util.showToast
  * @author : leixing
  * @date : 2019/7/17 9:31
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class OneTypeMultiLayoutItemClickActivity : ListActivity() {

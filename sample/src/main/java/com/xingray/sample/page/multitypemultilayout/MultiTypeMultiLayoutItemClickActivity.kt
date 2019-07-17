@@ -12,7 +12,7 @@ import com.xingray.sample.util.showToast
  * @author : leixing
  * @date : 2019/7/17 9:59
  * @version : 1.0.0
- * mail : leixing@baidu.com
+ * mail : leixing1012@qq.com
  *
  */
 class MultiTypeMultiLayoutItemClickActivity : ListActivity() {
