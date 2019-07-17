@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * xxx
+ * [View]工厂，用于构造[ViewHolder]的`ItemView`
  *
  * @author : leixing
  * @date : 2019/7/16 19:50

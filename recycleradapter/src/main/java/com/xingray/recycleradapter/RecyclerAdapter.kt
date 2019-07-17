@@ -10,6 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xingray.recycleradapter.ext.LayoutViewFactory
 import com.xingray.recycleradapter.ext.ReflectHolderFactory
 
+/**
+ *用于[RecyclerView]的适配器，可以通过简单的API实现数据的展示等功能
+ *
+ * @author : leixing
+ * @date : 19-7-14
+ * email : leixing1012@qq.com
+ *
+ */
 class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
     internal val items by lazy { mutableListOf<Any>() }
@@ -69,31 +77,6 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
             notifyItemMoved(from, to)
         }
     }
-
-    //    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>)
-//            : RecyclerAdapter {
-//        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
-//    }
-//
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, itemClickListener: ItemClickListener<T>)
-//            : RecyclerAdapter {
-//        return addType(dataClass, holderClass, holderClass.layoutId, null, itemClickListener::onItemClick)
-//    }
-//
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, itemClickListener: (parent: ViewGroup, position: Int, t: T?) -> Unit)
-//            : RecyclerAdapter {
-//        return addType(dataClass, holderClass, holderClass.layoutId, null, itemClickListener)
-//    }
-//
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, initializer: Initializer<ViewHolder<T>>, itemClickListener: (parent: ViewGroup, position: Int, t: T?) -> Unit)
-//            : RecyclerAdapter {
-//        return addType(dataClass, holderClass, holderClass.layoutId, initializer::initialize, itemClickListener)
-//    }
-//
-//    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<out VH>, initializer: ((ViewHolder<T>) -> Unit)? = null, itemClickListener: ((parent: ViewGroup, position: Int, t: T?) -> Unit)? = null)
-//            : RecyclerAdapter {
-//        return addType(dataClass, holderClass, holderClass.layoutId, initializer, itemClickListener)
-//    }
 
     inline fun <reified T : Any, VH : ViewHolder<T>> addType(holderClass: Class<VH>, layoutId: Int, noinline initializer: ((VH) -> Unit)?, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
         return addType(T::class.java, holderClass, layoutId, initializer, itemClickListener)

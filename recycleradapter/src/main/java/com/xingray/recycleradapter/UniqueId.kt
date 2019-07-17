@@ -3,7 +3,7 @@ package com.xingray.recycleradapter
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * xxx
+ * 生成唯一的id
  *
  * @author : leixing
  * @date : 2019/6/5 21:06

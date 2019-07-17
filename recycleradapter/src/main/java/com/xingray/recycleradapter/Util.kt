@@ -3,12 +3,11 @@ package com.xingray.recycleradapter
 import java.util.*
 
 /**
- * description : 工具类
+ * description : 工具类，主要用于集合数据处理
  *
  * @author : leixing
  * email : leixing1012@qq.com
  * @date : 2018/8/2 14:31
- *
  *
  */
 private fun <T> Iterable<T>?.getSize(): Int {
@@ -30,7 +29,7 @@ private fun Iterable<*>?.isOutOfIndex(index: Int): Boolean {
     return index < 0 || index >= this.getSize()
 }
 
-fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int): Boolean {
+internal fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int): Boolean {
     if (isOutOfIndex(fromIndex)) {
         return false
     }
@@ -56,7 +55,7 @@ fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int): Boolean {
     return true
 }
 
-fun <T> MutableList<T>.removeAll(): Boolean {
+internal fun <T> MutableList<T>.removeAll(): Boolean {
     if (isEmpty()) {
         return false
     }
@@ -65,7 +64,7 @@ fun <T> MutableList<T>.removeAll(): Boolean {
     return true
 }
 
-fun <T> MutableList<T>.update(list: List<T>?): Boolean {
+internal fun <T> MutableList<T>.update(list: List<T>?): Boolean {
     var updated = false
     if (!isEmpty()) {
         clear()
@@ -79,7 +78,7 @@ fun <T> MutableList<T>.update(list: List<T>?): Boolean {
     }
 }
 
-fun <T> MutableList<T>.add(index: Int, t: T?): Boolean {
+internal fun <T> MutableList<T>.add(index: Int, t: T?): Boolean {
     return if (t == null) {
         false
     } else {
@@ -88,7 +87,7 @@ fun <T> MutableList<T>.add(index: Int, t: T?): Boolean {
     }
 }
 
-fun <T> MutableList<T>.addAll(index: Int, items: List<T>?): Boolean {
+internal fun <T> MutableList<T>.addAll(index: Int, items: List<T>?): Boolean {
     return if (items == null) {
         false
     } else {
@@ -96,7 +95,7 @@ fun <T> MutableList<T>.addAll(index: Int, items: List<T>?): Boolean {
     }
 }
 
-fun <T> MutableList<T>.remove(position: Int, count: Int): List<T>? {
+internal fun <T> MutableList<T>.remove(position: Int, count: Int): List<T>? {
     if (position < 0 || position >= size) {
         return null
     }
@@ -113,19 +112,3 @@ fun <T> MutableList<T>.remove(position: Int, count: Int): List<T>? {
 
     return removed
 }
-
-fun <T> MutableList<T>.remove(position: Int): Boolean {
-    return if (position in 0 until size) {
-        removeAt(position) != null
-    } else {
-        false
-    }
-}
-
-//fun <T, VH : ViewHolder<T>> RecyclerAdapter.layoutViewSupport(holderClass: Class<VH>): LayoutViewFactory<T, VH> {
-//    return layoutViewSupport(holderClass.layoutId, adapter.getViewType(holderClass))
-//}
-//
-//fun <T, VH : ViewHolder<T>> layoutViewSupport(layoutId: Int, viewType: Int = 0): LayoutViewFactory<T, VH> {
-//    return LayoutViewFactory(LayoutInflater.from(context), layoutId, viewType, this)
-//}

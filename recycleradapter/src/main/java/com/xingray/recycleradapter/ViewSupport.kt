@@ -3,10 +3,20 @@ package com.xingray.recycleradapter
 import android.view.View
 import android.view.ViewGroup
 
+/**
+ * 用于记录列表中一个`ViewType`所对应的视图的信息，包括视图构造工厂，`Holder`构造工厂，
+ * 用于创建`ViewHolder`及当绑定点击事件等
+ *
+ * @author : leixing
+ * @date : 19-7-14
+ * email : leixing1012@qq.com
+ *
+ */
 class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
                                                private val adapter: RecyclerAdapter,
                                                private val viewFactory: (ViewGroup) -> View,
                                                private val holderFactory: (View) -> VH) {
+
     constructor(adapter: RecyclerAdapter, viewFactory: (ViewGroup) -> View, holderFactory: (View) -> VH)
             : this(0, adapter, viewFactory, holderFactory)
 
