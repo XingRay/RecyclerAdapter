@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 9
-        versionName "3.3.0"
+        versionCode 10
+        versionName "3.4.0"
     }
 
     buildTypes {
@@ -22,8 +22,4 @@ android {
 
 dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.1.0-beta01'
-}
-
-repositories {
-    mavenCentral()
 }

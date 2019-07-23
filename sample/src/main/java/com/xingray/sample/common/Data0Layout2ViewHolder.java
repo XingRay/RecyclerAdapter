@@ -28,7 +28,7 @@ public class Data0Layout2ViewHolder extends ViewHolder<Data0> {
     }
 
     @Override
-    public void bindItemView(Data0 data0, int position) {
+    public void onBindItemView(Data0 data0, int position) {
         tvText.setText(data0.getName());
     }
 

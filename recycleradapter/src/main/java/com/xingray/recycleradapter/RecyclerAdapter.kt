@@ -203,6 +203,6 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int) {
         val t = items[position]
-        holder.onBindItemView(t, position)
+        holder.bindItemView(t, position)
     }
 }

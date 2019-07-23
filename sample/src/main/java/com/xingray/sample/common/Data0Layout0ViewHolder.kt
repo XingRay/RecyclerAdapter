@@ -11,7 +11,7 @@ class Data0Layout0ViewHolder(itemView: View) : ViewHolder<Data0>(itemView) {
 
     private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 
-    override fun bindItemView(t: Data0, position: Int) {
+    override fun onBindItemView(t: Data0, position: Int) {
         itemView.setBackgroundColor(t.color)
 
         tvText.text = t.name

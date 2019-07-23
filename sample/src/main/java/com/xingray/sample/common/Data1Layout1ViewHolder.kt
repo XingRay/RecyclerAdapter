@@ -24,7 +24,7 @@ class Data1Layout1ViewHolder(itemView: View) : ViewHolder<Data1>(itemView) {
 
     private var selectOnClickListener: ((Data1, Int) -> Unit)? = null
 
-    override fun bindItemView(t: Data1, position: Int) {
+    override fun onBindItemView(t: Data1, position: Int) {
         itemView.setBackgroundColor(t.color)
 
         tvText.text = t.name

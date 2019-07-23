@@ -58,7 +58,7 @@ class ViewPager2TestActivity : AppCompatActivity() {
     class PagerViewHolder(itemView: View) : ViewHolder<Data0>(itemView) {
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 
-        override fun bindItemView(t: Data0, position: Int) {
+        override fun onBindItemView(t: Data0, position: Int) {
             tvText.text = t.name
         }
     }

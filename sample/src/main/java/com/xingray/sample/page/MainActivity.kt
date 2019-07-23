@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
         private val tvText: TextView = itemView.findViewById(R.id.tv_text)
 
-        override fun bindItemView(t: Test, position: Int) {
+        override fun onBindItemView(t: Test, position: Int) {
             tvText.text = t.name
         }
     }
