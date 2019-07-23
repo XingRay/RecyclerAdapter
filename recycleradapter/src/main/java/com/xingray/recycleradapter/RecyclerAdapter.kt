@@ -18,7 +18,7 @@ import com.xingray.recycleradapter.ext.ReflectHolderFactory
  * email : leixing1012@qq.com
  *
  */
-class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter<ViewHolder<out Any>>() {
+open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
     internal val items by lazy { mutableListOf<Any>() }
     private val viewTypeMappers by lazy { mutableMapOf<Class<out Any>, (Any, Int) -> Int>() }
