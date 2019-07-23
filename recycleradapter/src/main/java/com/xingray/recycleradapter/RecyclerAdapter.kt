@@ -97,8 +97,14 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
     }
 
     fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
-        val init = if (initializer == null) null else initializer::initialize
-        val onItemClick = if (itemClickListener == null) null else itemClickListener::onItemClick
+        var init: ((VH) -> Unit)? = null
+        if (initializer != null) {
+            init = initializer::initialize
+        }
+        var onItemClick: ((ViewGroup, Int, T) -> Unit)? = null
+        if (itemClickListener != null) {
+            onItemClick = itemClickListener::onItemClick
+        }
         return addType(dataClass, holderClass, holderClass.layoutId, init, onItemClick)
     }
 
