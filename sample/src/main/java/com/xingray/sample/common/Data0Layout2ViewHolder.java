@@ -9,6 +9,8 @@ import com.xingray.sample.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * xxx
  *
@@ -28,11 +30,16 @@ public class Data0Layout2ViewHolder extends ViewHolder<Data0> {
     }
 
     @Override
-    public void onBindItemView(Data0 data0, int position) {
+    protected void onBindItemView(Data0 data0, int position) {
         tvText.setText(data0.getName());
     }
 
     private void initView(View itemView) {
         tvText = (TextView) itemView.findViewById(R.id.tv_text);
+    }
+
+    @Override
+    protected void onRefreshItemView(@NotNull List<?> payloads) {
+        super.onRefreshItemView(payloads);
     }
 }

@@ -197,7 +197,7 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
-            holder.onRefreshItemView(payloads)
+            holder.refreshItemView(payloads)
         }
     }
 

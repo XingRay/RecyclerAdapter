@@ -14,14 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
  */
 abstract class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bindItemView(t: Any, position: Int) {
+    internal fun bindItemView(t: Any, position: Int) {
         @Suppress("UNCHECKED_CAST")
         (onBindItemView(t as T, position))
     }
 
-    abstract fun onBindItemView(t: T, position: Int)
+    internal fun refreshItemView(payloads: List<Any>) {
+        onRefreshItemView(payloads)
+    }
 
-    open fun onRefreshItemView(payloads: List<Any>) {
+    protected abstract fun onBindItemView(t: T, position: Int)
+
+    protected open fun onRefreshItemView(payloads: List<Any>) {
 
     }
 }
