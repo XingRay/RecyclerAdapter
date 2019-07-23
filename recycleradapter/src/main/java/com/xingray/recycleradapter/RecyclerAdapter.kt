@@ -89,14 +89,18 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
     }
 
     fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>): RecyclerAdapter {
-        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
+        return addTypeJ(dataClass, holderClass, holderClass.layoutId, null, null)
     }
 
     fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
-        return addTypeJ(dataClass, holderClass, null, itemClickListener)
+        return addTypeJ(dataClass, holderClass, holderClass.layoutId, null, itemClickListener)
     }
 
     fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        return addTypeJ(dataClass, holderClass, holderClass.layoutId, initializer, itemClickListener)
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
         var init: ((VH) -> Unit)? = null
         if (initializer != null) {
             init = initializer::initialize
@@ -105,7 +109,7 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         if (itemClickListener != null) {
             onItemClick = itemClickListener::onItemClick
         }
-        return addType(dataClass, holderClass, holderClass.layoutId, init, onItemClick)
+        return addType(dataClass, holderClass, layoutId, init, onItemClick)
     }
 
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
