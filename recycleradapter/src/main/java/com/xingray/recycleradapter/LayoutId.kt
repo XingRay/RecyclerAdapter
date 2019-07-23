@@ -11,11 +11,11 @@ package com.xingray.recycleradapter
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class LayoutId(val layoutId: Int)
+annotation class LayoutId(val value: Int)
 
 val <VH> Class<VH>.layoutId: Int
     get() {
         val annotation = getAnnotation(LayoutId::class.java)
                 ?: throw IllegalArgumentException("View Holder Class must have @LayoutId Annotation")
-        return annotation.layoutId
+        return annotation.value
     }
