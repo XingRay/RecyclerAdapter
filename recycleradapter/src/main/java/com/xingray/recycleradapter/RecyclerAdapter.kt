@@ -18,12 +18,14 @@ import com.xingray.recycleradapter.ext.ReflectHolderFactory
  * email : leixing1012@qq.com
  *
  */
-class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<out Any>>() {
+class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
     internal val items by lazy { mutableListOf<Any>() }
     private val viewTypeMappers by lazy { mutableMapOf<Class<out Any>, (Any, Int) -> Int>() }
     private val viewSupports by lazy { SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>() }
     private val viewTypeMap by lazy { mutableMapOf<Class<*>, Int>() }
+
+    constructor() : this(null)
 
     fun add(item: Any?) {
         add(items.size, item)
@@ -87,9 +89,10 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
     }
 
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+        context ?: throw IllegalStateException("must set context by constructor")
+
         val viewType = getViewType(holderClass)
         val viewTypeMapper: ((t: T, position: Int) -> Int) = { _, _ -> viewType }
-
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)::createItemView
         val holderFactory = ReflectHolderFactory(holderClass)::createViewHolder
         val viewSupport = ViewSupport(this, viewFactory, holderFactory)
@@ -136,16 +139,20 @@ class RecyclerAdapter(private val context: Context) : RecyclerView.Adapter<ViewH
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun <T : Any, VH : ViewHolder<T>> addLayoutViewSupport(viewType: Int, holderClass: Class<VH>): RecyclerAdapter {
+        context ?: throw IllegalStateException("must set context by constructor")
+
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), holderClass.layoutId)::createItemView
         val holderFactory = ReflectHolderFactory(holderClass)::createViewHolder
         val viewSupport = ViewSupport(this, viewFactory, holderFactory)
-        viewSupports.put(viewType, viewSupport)
+        addViewSupport(viewType, viewSupport)
 
         return this
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun <T : Any, VH : ViewHolder<T>> newLayoutViewSupport(viewType: Int, holderClass: Class<VH>): ViewSupport<T, VH> {
+        context ?: throw IllegalStateException("must set context by constructor")
+
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), holderClass.layoutId)::createItemView
         val holderFactory = ReflectHolderFactory(holderClass)::createViewHolder
         return ViewSupport(viewType, this, viewFactory, holderFactory)
