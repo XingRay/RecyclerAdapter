@@ -40,8 +40,10 @@ class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
         return adapter
     }
 
-    fun itemClickListener(listener: ItemClickListener<T>?): ViewSupport<T, VH> {
-        listener?.let {
+    fun itemClickListenerJ(listener: ItemClickListener<T>?): ViewSupport<T, VH> {
+        if (listener == null) {
+            itemClickListener = null
+        } else {
             itemClickListener = listener::onItemClick
         }
         return this
@@ -52,8 +54,10 @@ class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
         return this
     }
 
-    fun initializer(initializer: Initializer<VH>?): ViewSupport<T, VH> {
-        initializer?.let {
+    fun initializerJ(initializer: Initializer<VH>?): ViewSupport<T, VH> {
+        if (initializer == null) {
+            this.initializer = null
+        } else {
             this.initializer = initializer::initialize
         }
         return this

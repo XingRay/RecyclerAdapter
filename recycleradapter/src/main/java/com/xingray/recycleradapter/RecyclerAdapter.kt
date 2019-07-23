@@ -133,7 +133,7 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         return viewType
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewTypeMapper(dataClass: Class<T>, mapper: ViewTypeMapper<T>): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addViewTypeMapperJ(dataClass: Class<T>, mapper: ViewTypeMapper<T>): RecyclerAdapter {
         return addViewTypeMapper(dataClass, mapper::getViewType)
     }
 
