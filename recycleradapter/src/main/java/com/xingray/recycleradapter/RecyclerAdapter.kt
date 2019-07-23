@@ -88,6 +88,20 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         return addType(T::class.java, holderClass, holderClass.layoutId, initializer, itemClickListener)
     }
 
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>): RecyclerAdapter {
+        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        return addTypeJ(dataClass, holderClass, null, itemClickListener)
+    }
+
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        val init = if (initializer == null) null else initializer::initialize
+        val onItemClick = if (itemClickListener == null) null else itemClickListener::onItemClick
+        return addType(dataClass, holderClass, holderClass.layoutId, init, onItemClick)
+    }
+
     fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
         context ?: throw IllegalStateException("must set context by constructor")
 
