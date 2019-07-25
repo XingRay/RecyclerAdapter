@@ -11,5 +11,5 @@ import android.view.View
  *
  */
 interface HolderFactory<VH> {
-    fun createViewHolder(itemView: View): VH
+    fun create(itemView: View): VH
 }

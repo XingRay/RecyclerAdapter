@@ -27,7 +27,7 @@ class OneTypeSimpleActivity : ListActivity() {
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addType(Data0Layout0ViewHolder::class.java)
+                .addView(Data0Layout0ViewHolder::class.java)
     }
 
     override fun loadData(): List<Any> {

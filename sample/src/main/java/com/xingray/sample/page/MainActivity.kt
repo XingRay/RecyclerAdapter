@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(applicationContext)
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .addType(TestViewHolder::class.java, null) { _, _, t ->
+                .addView(TestViewHolder::class.java, null) { _, _, t ->
                     t.starter.invoke()
                 }
 

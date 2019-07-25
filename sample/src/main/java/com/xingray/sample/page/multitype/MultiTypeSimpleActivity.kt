@@ -22,7 +22,7 @@ class MultiTypeSimpleActivity : ListActivity() {
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addType(Data0Layout0ViewHolder::class.java)
-                .addType(Data1Layout0ViewHolder::class.java)
+                .addView(Data0Layout0ViewHolder::class.java)
+                .addView(Data1Layout0ViewHolder::class.java)
     }
 }

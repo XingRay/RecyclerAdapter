@@ -1,5 +1,6 @@
 package com.xingray.recycleradapter
 
+import android.util.SparseArray
 import java.util.*
 
 /**
@@ -111,4 +112,8 @@ internal fun <T> MutableList<T>.remove(position: Int, count: Int): List<T>? {
     }
 
     return removed
+}
+
+internal operator fun <E> SparseArray<E>.set(key: Int, value: E) {
+    put(key, value)
 }

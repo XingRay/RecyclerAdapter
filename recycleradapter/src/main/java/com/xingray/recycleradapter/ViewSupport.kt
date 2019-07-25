@@ -12,16 +12,12 @@ import android.view.ViewGroup
  * email : leixing1012@qq.com
  *
  */
-class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
-                                               private val adapter: RecyclerAdapter,
-                                               private val viewFactory: (ViewGroup) -> View,
-                                               private val holderFactory: (View) -> VH) {
-
-    constructor(adapter: RecyclerAdapter, viewFactory: (ViewGroup) -> View, holderFactory: (View) -> VH)
-            : this(0, adapter, viewFactory, holderFactory)
+open class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
+                                                    private val adapter: RecyclerAdapter,
+                                                    private val viewFactory: (ViewGroup) -> View,
+                                                    private val holderFactory: (View) -> VH) {
 
     private var itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null
-    private var initializer: ((VH) -> Unit)? = null
 
     fun onCreateViewHolder(parent: ViewGroup): ViewHolder<T> {
         val itemView = viewFactory.invoke(parent)
@@ -31,7 +27,6 @@ class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
             @Suppress("UNCHECKED_CAST")
             itemClickListener?.invoke(parent, position, adapter.items[position] as T)
         }
-        initializer?.invoke(holder)
         return holder
     }
 
@@ -51,20 +46,6 @@ class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
 
     fun itemClickListener(listener: ((ViewGroup, Int, T) -> Unit)?): ViewSupport<T, VH> {
         itemClickListener = listener
-        return this
-    }
-
-    fun initializerJ(initializer: Initializer<VH>?): ViewSupport<T, VH> {
-        if (initializer == null) {
-            this.initializer = null
-        } else {
-            this.initializer = initializer::initialize
-        }
-        return this
-    }
-
-    fun initializer(initializer: ((VH) -> Unit)?): ViewSupport<T, VH> {
-        this.initializer = initializer
         return this
     }
 }

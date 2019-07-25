@@ -2,9 +2,10 @@ package com.xingray.recycleradapter.ext
 
 import android.view.View
 import com.xingray.recycleradapter.HolderFactory
+import com.xingray.recycleradapter.Initializer
 
 /**
- * xxx
+ * Holder工厂实现：反射构造Holder
  *
  * @author : leixing
  * @date : 2019/7/17 9:16
@@ -13,10 +14,28 @@ import com.xingray.recycleradapter.HolderFactory
  *
  */
 class ReflectHolderFactory<VH>(private val holderClass: Class<VH>) : HolderFactory<VH> {
-    override fun createViewHolder(itemView: View): VH {
+
+    private var initializer: ((VH) -> Unit)? = null
+
+    fun initializerJ(initializer: Initializer<VH>?): ReflectHolderFactory<VH> {
+        if (initializer == null) {
+            this.initializer = null
+        } else {
+            this.initializer = initializer::initialize
+        }
+        return this
+    }
+
+    fun initializer(initializer: ((VH) -> Unit)?): ReflectHolderFactory<VH> {
+        this.initializer = initializer
+        return this
+    }
+
+    override fun create(itemView: View): VH {
         val constructor = holderClass.getConstructor(View::class.java)
         constructor.isAccessible = true
-        @Suppress("UNCHECKED_CAST")
-        return constructor.newInstance(itemView)
+        val holder: VH = constructor.newInstance(itemView)
+        initializer?.invoke(holder)
+        return holder
     }
 }
