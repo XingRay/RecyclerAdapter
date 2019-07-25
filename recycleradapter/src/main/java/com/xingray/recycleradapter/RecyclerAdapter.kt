@@ -88,27 +88,27 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         }
     }
 
-    inline fun <reified T : Any, VH : ViewHolder<T>> addView(holderClass: Class<VH>, layoutId: Int, noinline initializer: ((VH) -> Unit)?, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
-        return addView(T::class.java, holderClass, layoutId, initializer, itemClickListener)
+    inline fun <reified T : Any, VH : ViewHolder<T>> addType(holderClass: Class<VH>, layoutId: Int, noinline initializer: ((VH) -> Unit)?, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+        return addType(T::class.java, holderClass, layoutId, initializer, itemClickListener)
     }
 
-    inline fun <reified T : Any, VH : ViewHolder<T>> addView(holderClass: Class<VH>, noinline initializer: ((VH) -> Unit)? = null, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
-        return addView(T::class.java, holderClass, holderClass.layoutId, initializer, itemClickListener)
+    inline fun <reified T : Any, VH : ViewHolder<T>> addType(holderClass: Class<VH>, noinline initializer: ((VH) -> Unit)? = null, noinline itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+        return addType(T::class.java, holderClass, holderClass.layoutId, initializer, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJ(dataClass: Class<T>, holderClass: Class<VH>): RecyclerAdapter {
-        return addView(dataClass, holderClass, holderClass.layoutId, null, null)
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>): RecyclerAdapter {
+        return addType(dataClass, holderClass, holderClass.layoutId, null, null)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJ(dataClass: Class<T>, holderClass: Class<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
-        return addViewJ(dataClass, holderClass, holderClass.layoutId, null, itemClickListener)
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        return addTypeJ(dataClass, holderClass, holderClass.layoutId, null, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJ(dataClass: Class<T>, holderClass: Class<VH>, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
-        return addViewJ(dataClass, holderClass, holderClass.layoutId, initializer, itemClickListener)
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        return addTypeJ(dataClass, holderClass, holderClass.layoutId, initializer, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJ(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addTypeJ(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: Initializer<VH>?, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
         context ?: throw IllegalStateException("must set context by constructor")
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)::createItemView
 
@@ -122,14 +122,14 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         if (itemClickListener != null) {
             onItemClick = itemClickListener::onItemClick
         }
-        return addView(dataClass, holderClass, viewFactory, holderFactory, onItemClick)
+        return addType(dataClass, holderClass, viewFactory, holderFactory, onItemClick)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJh(dataClass: Class<T>, holderClass: Class<VH>, factory: HolderFactory<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
-        return addViewJh(dataClass, holderClass, holderClass.layoutId, factory, itemClickListener)
+    fun <T : Any, VH : ViewHolder<T>> addTypeJh(dataClass: Class<T>, holderClass: Class<VH>, factory: HolderFactory<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+        return addTypeJh(dataClass, holderClass, holderClass.layoutId, factory, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJh(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, factory: HolderFactory<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addTypeJh(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, factory: HolderFactory<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
         context ?: throw IllegalStateException("must set context by constructor")
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)::createItemView
 
@@ -137,33 +137,33 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         if (itemClickListener != null) {
             onItemClick = itemClickListener::onItemClick
         }
-        return addView(dataClass, holderClass, viewFactory, factory::create, onItemClick)
+        return addType(dataClass, holderClass, viewFactory, factory::create, onItemClick)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addViewJv(dataClass: Class<T>, holderClass: Class<VH>, viewFactory: ViewFactory, initializer: Initializer<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addTypeJv(dataClass: Class<T>, holderClass: Class<VH>, viewFactory: ViewFactory, initializer: Initializer<VH>, itemClickListener: ItemClickListener<T>?): RecyclerAdapter {
         val holderFactory = ReflectHolderFactory(holderClass).initializer(initializer::initialize)::create
 
         var onItemClick: ((ViewGroup, Int, T) -> Unit)? = null
         if (itemClickListener != null) {
             onItemClick = itemClickListener::onItemClick
         }
-        return addView(dataClass, holderClass, viewFactory::createItemView, holderFactory, onItemClick)
+        return addType(dataClass, holderClass, viewFactory::createItemView, holderFactory, onItemClick)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addView(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, layoutId: Int, initializer: ((VH) -> Unit)?, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
         context ?: throw IllegalStateException("must set context by constructor")
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)::createItemView
         val holderFactory = ReflectHolderFactory(holderClass).initializer(initializer)::create
-        return addView(dataClass, holderClass, viewFactory, holderFactory, itemClickListener)
+        return addType(dataClass, holderClass, viewFactory, holderFactory, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addView(dataClass: Class<T>, holderClass: Class<VH>, holderFactory: (View) -> VH, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, holderFactory: (View) -> VH, itemClickListener: ((ViewGroup, Int, T) -> Unit)?): RecyclerAdapter {
         context ?: throw IllegalStateException("must set context by constructor")
         val viewFactory = LayoutViewFactory(LayoutInflater.from(context), holderClass.layoutId)::createItemView
-        return addView(dataClass, holderClass, viewFactory, holderFactory, itemClickListener)
+        return addType(dataClass, holderClass, viewFactory, holderFactory, itemClickListener)
     }
 
-    fun <T : Any, VH : ViewHolder<T>> addView(dataClass: Class<T>, holderClass: Class<VH>, viewFactory: (ViewGroup) -> View, holderFactory: (View) -> VH, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
+    fun <T : Any, VH : ViewHolder<T>> addType(dataClass: Class<T>, holderClass: Class<VH>, viewFactory: (ViewGroup) -> View, holderFactory: (View) -> VH, itemClickListener: ((ViewGroup, Int, T) -> Unit)? = null): RecyclerAdapter {
         val viewType = getOrGenerateViewType(holderClass)
         val viewTypeMapper: ((t: T, position: Int) -> Int) = { _, _ -> viewType }
         val viewSupport = ViewSupport(viewType, this, viewFactory, holderFactory)

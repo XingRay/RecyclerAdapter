@@ -47,7 +47,7 @@ class ViewPager2TestActivity : AppCompatActivity() {
         vpPager.orientation = ViewPager2.ORIENTATION_VERTICAL
 
         mAdapter = RecyclerAdapter(applicationContext)
-                .addView(PagerViewHolder::class.java, null) { _, position, t ->
+                .addType(PagerViewHolder::class.java, null) { _, position, t ->
                     showToast("$position ${t.name} clicked")
                 }
 

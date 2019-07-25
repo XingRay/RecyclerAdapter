@@ -31,10 +31,10 @@ class MultiTypeItemClickActivity : ListActivity() {
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addView(Data0Layout0ViewHolder::class.java, null) { _, position, t ->
+                .addType(Data0Layout0ViewHolder::class.java, null) { _, position, t ->
                     showToast("position:$position , name:${t.name}")
                 }
-                .addView(Data1Layout0ViewHolder::class.java, null) { _, position, t ->
+                .addType(Data1Layout0ViewHolder::class.java, null) { _, position, t ->
                     showToast("position:$position , size:${t.size}")
                 }
     }

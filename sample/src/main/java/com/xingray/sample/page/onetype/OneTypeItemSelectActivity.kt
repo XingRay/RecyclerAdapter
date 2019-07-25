@@ -26,7 +26,7 @@ class OneTypeItemSelectActivity : ListActivity() {
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addView(Data0Layout1ViewHolder::class.java, {
+                .addType(Data0Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { t, position ->
                         t.selected = !t.selected
                         adapter?.notifyItemChanged(position, t.selected)

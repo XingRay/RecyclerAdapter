@@ -27,13 +27,13 @@ class MultiTypeItemSelectActivity : ListActivity() {
 
     override fun createAdapter(): RecyclerAdapter {
         return RecyclerAdapter(applicationContext)
-                .addView(Data0Layout1ViewHolder::class.java, {
+                .addType(Data0Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { data0, position ->
                         data0.selected = !data0.selected
                         adapter?.notifyItemChanged(position, data0.selected)
                     }
                 }, null)
-                .addView(Data1Layout1ViewHolder::class.java, {
+                .addType(Data1Layout1ViewHolder::class.java, {
                     it.selectOnClickListener { data1, position ->
                         data1.selected = !data1.selected
                         adapter?.notifyItemChanged(position, data1.selected)

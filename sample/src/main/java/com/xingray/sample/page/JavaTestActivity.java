@@ -38,7 +38,7 @@ public class JavaTestActivity extends ListActivity {
     @Override
     public RecyclerAdapter createAdapter() {
         return new RecyclerAdapter(getApplicationContext())
-                .addViewJ(Data0.class, Data0Layout0ViewHolder.class, (parent, position, data0) ->
+                .addTypeJ(Data0.class, Data0Layout0ViewHolder.class, (parent, position, data0) ->
                         UiUtil.showToast(JavaTestActivity.this, position + "" + data0.getName() + " clicked")
                 )
                 .addViewTypeMapperJ(Data1.class, (data1, position) -> position % 2)
