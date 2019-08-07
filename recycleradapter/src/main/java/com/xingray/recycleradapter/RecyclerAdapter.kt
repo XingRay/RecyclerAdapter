@@ -58,9 +58,8 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
     }
 
     fun remove(position: Int) {
-        if (items.remove(position)) {
-            notifyItemRemoved(position)
-        }
+        items.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     fun remove(position: Int, count: Int) {
