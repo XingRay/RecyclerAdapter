@@ -2,6 +2,7 @@ package com.xingray.recycleradapter
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * 用于记录列表中一个`ViewType`所对应的视图的信息，包括视图构造工厂，`Holder`构造工厂，
@@ -24,6 +25,9 @@ open class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
         val holder = holderFactory.invoke(itemView)
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
+            if (position == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
             @Suppress("UNCHECKED_CAST")
             itemClickListener?.invoke(parent, position, adapter.items[position] as T)
         }
