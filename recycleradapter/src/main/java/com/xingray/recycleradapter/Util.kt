@@ -72,7 +72,7 @@ internal fun <T> MutableList<T>.update(list: List<T>?): Boolean {
         updated = true
     }
 
-    return if (list != null) {
+    return if (list?.isNotEmpty() == true) {
         addAll(list)
     } else {
         updated
