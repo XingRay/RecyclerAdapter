@@ -9,8 +9,6 @@ import com.xingray.sample.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * xxx
  *
@@ -39,7 +37,7 @@ public class Data0Layout2ViewHolder extends ViewHolder<Data0> {
     }
 
     @Override
-    protected void onRefreshItemView(@NotNull List<?> payloads) {
-        super.onRefreshItemView(payloads);
+    protected void onRefreshItemView(@NotNull Object payload) {
+        super.onRefreshItemView(payload);
     }
 }

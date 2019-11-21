@@ -1,6 +1,6 @@
 package com.xingray.sample.page.onetype
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import com.xingray.recycleradapter.RecyclerAdapter
 import com.xingray.sample.common.Data0Layout0ViewHolder
@@ -10,13 +10,13 @@ import com.xingray.sample.util.showToast
 class OneTypeItemClickActivity : ListActivity() {
 
     companion object {
-        fun start(context: Context) {
-            val starter = Intent(context, OneTypeItemClickActivity::class.java)
-            context.startActivity(starter)
+        fun start(activity: Activity) {
+            val starter = Intent(activity, OneTypeItemClickActivity::class.java)
+            activity.startActivity(starter)
         }
     }
 
-    override fun loadData(): List<Any> {
+    override fun loadData(): List<Any?> {
         return repository.loadData0()
     }
 

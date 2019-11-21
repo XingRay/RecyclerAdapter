@@ -20,12 +20,14 @@ abstract class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 
     internal fun refreshItemView(payloads: List<Any>) {
-        onRefreshItemView(payloads)
+        payloads.forEach {
+            onRefreshItemView(it)
+        }
     }
 
     protected abstract fun onBindItemView(t: T, position: Int)
 
-    protected open fun onRefreshItemView(payloads: List<Any>) {
+    protected open fun onRefreshItemView(payload: Any) {
 
     }
 }

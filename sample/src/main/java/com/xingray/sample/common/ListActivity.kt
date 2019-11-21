@@ -38,7 +38,7 @@ abstract class ListActivity : Activity() {
         adapter?.update(loadData())
     }
 
-    abstract fun loadData(): List<Any>
+    abstract fun loadData(): List<Any?>
 
     abstract fun createAdapter(): RecyclerAdapter
 }

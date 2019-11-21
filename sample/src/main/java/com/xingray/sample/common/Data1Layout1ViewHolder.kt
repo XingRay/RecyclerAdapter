@@ -36,12 +36,9 @@ class Data1Layout1ViewHolder(itemView: View) : ViewHolder<Data1>(itemView) {
         }
     }
 
-    override fun onRefreshItemView(payloads: List<Any>) {
-        super.onRefreshItemView(payloads)
-        for (payload in payloads) {
-            if (payload is Boolean) {
-                showSelected(payload)
-            }
+    override fun onRefreshItemView(payload: Any) {
+        if (payload is Boolean) {
+            showSelected(payload)
         }
     }
 
@@ -56,6 +53,4 @@ class Data1Layout1ViewHolder(itemView: View) : ViewHolder<Data1>(itemView) {
             Color.DKGRAY
         })
     }
-
-
 }

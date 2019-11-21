@@ -22,16 +22,27 @@ import com.xingray.recycleradapter.ext.ReflectHolderFactory
  */
 open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter<ViewHolder<out Any>>() {
 
-    internal val items by lazy { mutableListOf<Any>() }
+    companion object {
+        /**
+         * null所对应的`ViewType`
+         */
+        const val VIEW_TYPE_NULL: Int = 0x0000eeff
+    }
+
+    internal val items by lazy { mutableListOf<Any?>() }
     private val viewSupports by lazy { SparseArray<ViewSupport<out Any, out ViewHolder<out Any>>>() }
     private val viewTypeMappers by lazy { mutableMapOf<Class<out Any>, (Any, Int) -> Int>() }
     private val viewTypeMap by lazy { mutableMapOf<Class<out Any>, Int>() }
+
+    private var nullViewFactory: ((ViewGroup) -> View)? = null
+    private var nullHolderFactory: ((View) -> ViewHolder<out Any>)? = null
+    private var nullItemCLickListener: ((ViewGroup, Int, Any?) -> Unit)? = null
 
     constructor() : this(null)
 
     internal val inflater: LayoutInflater
         get() {
-            val context = this.context ?: throw NullPointerException("context is requored")
+            val context = this.context ?: throw NullPointerException("context is required")
             return LayoutInflater.from(context)
         }
 
@@ -41,17 +52,16 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun add(index: Int, item: Any?) {
-        if (items.add(index, item)) {
-            notifyItemInserted(index)
-        }
+        items.add(index, item)
+        notifyItemInserted(index)
     }
 
-    fun addAll(list: List<Any>?) {
+    fun addAll(list: List<Any?>?) {
         addAll(items.size, list)
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun addAll(start: Int, items: List<Any>?) {
+    fun addAll(start: Int, items: List<Any?>?) {
         if (this.items.addAll(start, items)) {
             notifyItemRangeInserted(start, items?.size ?: 0)
         }
@@ -68,7 +78,7 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         }
     }
 
-    fun update(list: List<Any>?) {
+    fun update(list: List<Any?>?) {
         if (items.update(list)) {
             notifyDataSetChanged()
         }
@@ -262,15 +272,76 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
         return LayoutViewSupport(viewType, this, factory, holderFactory)
     }
 
+    fun <VH : ViewHolder<out Any>> nullItemSupport(viewFactory: (ViewGroup) -> View, holderFactory: (View) -> VH): RecyclerAdapter {
+        nullViewFactory = viewFactory
+        nullHolderFactory = holderFactory
+        return this
+    }
+
+    fun <VH : ViewHolder<out Any>> nullItemSupport(viewFactory: ViewFactory, holderFactory: HolderFactory<VH>): RecyclerAdapter {
+        nullItemSupport(viewFactory::createItemView, holderFactory::create)
+        return this
+    }
+
+    fun <VH : ViewHolder<out Any>> nullItemSupport(holderClass: Class<VH>, initializer: Initializer<VH>?): RecyclerAdapter {
+        nullItemSupport(holderClass.layoutId, holderClass, initializer)
+        return this
+    }
+
+    fun <VH : ViewHolder<out Any>> nullItemSupport(layoutId: Int, holderClass: Class<VH>, initializer: Initializer<VH>?): RecyclerAdapter {
+        nullItemSupport(layoutId, ReflectHolderFactory(holderClass).initializerJ(initializer))
+        return this
+    }
+
+    fun <VH : ViewHolder<out Any>> nullItemSupport(layoutId: Int, reflectHolderFactory: ReflectHolderFactory<VH>): RecyclerAdapter {
+        val viewFactory: ViewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)
+        val holderFactory: HolderFactory<VH> = reflectHolderFactory
+        nullItemSupport(viewFactory, holderFactory)
+        return this
+    }
+
+    fun <VH : ViewHolder<out Any>> nullItemSupport(layoutId: Int, holderFactory: HolderFactory<VH>): RecyclerAdapter {
+        val viewFactory: ViewFactory = LayoutViewFactory(LayoutInflater.from(context), layoutId)
+        nullItemSupport(viewFactory, holderFactory)
+        return this
+    }
+
+    fun nullItemClickLister(listener: ItemClickListener<Any?>): RecyclerAdapter {
+        nullItemCLickListener = listener::onItemClick
+        return this
+    }
+
+    fun nullItemClickLister(listener: (parent: ViewGroup, position: Int, t: Any?) -> Unit): RecyclerAdapter {
+        nullItemCLickListener = listener
+        return this
+    }
+
     override fun getItemViewType(position: Int): Int {
-        val itemData = items[position]
+        val itemData = items[position] ?: return VIEW_TYPE_NULL
         val viewTypeMapper = viewTypeMappers[itemData::class.java]
         viewTypeMapper ?: throw IllegalStateException("unsupported type, data:$itemData")
         return viewTypeMapper.invoke(itemData, position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<out Any> {
+        if (viewType == VIEW_TYPE_NULL) {
+            return createNullItemViewHolder(parent)
+        }
         return viewSupports.get(viewType).onCreateViewHolder(parent)
+    }
+
+    private fun createNullItemViewHolder(parent: ViewGroup): ViewHolder<out Any> {
+        val viewFactory = nullViewFactory
+                ?: throw java.lang.IllegalStateException("must set nullViewFactory by nullItemSupport()")
+        val holderFactory = nullHolderFactory
+                ?: throw java.lang.IllegalStateException("must set nullHolderFactory by nullItemSupport()")
+        val viewHolder = holderFactory.invoke(viewFactory.invoke(parent))
+        if (nullItemCLickListener != null) {
+            viewHolder.itemView.setOnClickListener {
+                nullItemCLickListener?.invoke(parent, viewHolder.adapterPosition, it)
+            }
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int {
@@ -286,7 +357,7 @@ open class RecyclerAdapter(private var context: Context?) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder<out Any>, position: Int) {
-        val t = items[position]
+        val t = items[position] ?: return
         holder.bindItemView(t, position)
     }
 

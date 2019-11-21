@@ -1,6 +1,6 @@
 package com.xingray.sample.page
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,9 +18,9 @@ import com.xingray.sample.util.showToast
 class ViewPager2TestActivity : AppCompatActivity() {
 
     companion object {
-        fun start(context: Context) {
-            val starter = Intent(context, ViewPager2TestActivity::class.java)
-            context.startActivity(starter)
+        fun start(activity: Activity) {
+            val starter = Intent(activity, ViewPager2TestActivity::class.java)
+            activity.startActivity(starter)
         }
     }
 

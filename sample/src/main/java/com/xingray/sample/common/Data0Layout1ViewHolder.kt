@@ -39,12 +39,9 @@ class Data0Layout1ViewHolder(itemView: View) : ViewHolder<Data0>(itemView) {
         })
     }
 
-    override fun onRefreshItemView(payloads: List<Any>) {
-        super.onRefreshItemView(payloads)
-        for (payload in payloads) {
-            if (payload is Boolean) {
-                showSelected(payload)
-            }
+    override fun onRefreshItemView(payload: Any) {
+        if (payload is Boolean) {
+            showSelected(payload)
         }
     }
 }

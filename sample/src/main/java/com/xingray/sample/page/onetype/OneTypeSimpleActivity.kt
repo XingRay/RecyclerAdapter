@@ -30,7 +30,7 @@ class OneTypeSimpleActivity : ListActivity() {
                 .addType(Data0Layout0ViewHolder::class.java)
     }
 
-    override fun loadData(): List<Any> {
+    override fun loadData(): List<Any?> {
         return repository.loadData0()
     }
 }

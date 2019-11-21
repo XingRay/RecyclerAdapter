@@ -1,4 +1,4 @@
-package com.xingray.sample.page.multitypemultilayout
+package com.xingray.sample.page.nullsupport
 
 import android.app.Activity
 import android.content.Intent
@@ -7,20 +7,34 @@ import com.xingray.sample.common.*
 import com.xingray.sample.util.showToast
 
 /**
- * xxx
+ * 对为`null`的item的支持的测试
  *
  * @author : leixing
- * @date : 2019/7/17 9:59
+ * @date : 2019/11/21 16:54
  * @version : 1.0.0
- * mail : leixing1012@qq.com
+ * mail : leixing@baidu.com
  *
  */
-class MultiTypeMultiLayoutItemClickActivity : ListActivity() {
+class NullSupportActivity : ListActivity() {
+
     companion object {
         fun start(activity: Activity) {
-            val starter = Intent(activity.applicationContext, MultiTypeMultiLayoutItemClickActivity::class.java)
+            val starter = Intent(activity.applicationContext, NullSupportActivity::class.java)
             activity.startActivity(starter)
         }
+    }
+
+    override fun loadData(): List<Any?> {
+        val loadData = repository.loadData()
+        val list = mutableListOf<Any?>()
+        list.add(null)
+        list.add(null)
+        list.add(null)
+        list.addAll(loadData)
+        list.add(null)
+        list.add(null)
+        list.add(null)
+        return list
     }
 
     override fun createAdapter(): RecyclerAdapter {
@@ -46,9 +60,9 @@ class MultiTypeMultiLayoutItemClickActivity : ListActivity() {
                     showToast("position:$position, layout:3, size:${data1.size}")
                 }
                 .addToAdapter()
-    }
-
-    override fun loadData(): List<Any?> {
-        return repository.loadData()
+                .nullItemSupport(NullViewHolder::class.java, null)
+                .nullItemClickLister { _, position, _ ->
+                    showToast("NULL item clicked, position:$position")
+                }
     }
 }

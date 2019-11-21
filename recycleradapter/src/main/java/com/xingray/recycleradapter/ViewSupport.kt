@@ -23,14 +23,18 @@ open class ViewSupport<T : Any, VH : ViewHolder<T>>(private val viewType: Int,
     fun onCreateViewHolder(parent: ViewGroup): ViewHolder<T> {
         val itemView = viewFactory.invoke(parent)
         val holder = holderFactory.invoke(itemView)
-        holder.itemView.setOnClickListener {
-            val position = holder.adapterPosition
-            if (position == RecyclerView.NO_POSITION) {
-                return@setOnClickListener
+
+        if (itemClickListener != null) {
+            holder.itemView.setOnClickListener {
+                val position = holder.adapterPosition
+                if (position == RecyclerView.NO_POSITION) {
+                    return@setOnClickListener
+                }
+                @Suppress("UNCHECKED_CAST")
+                itemClickListener?.invoke(parent, position, adapter.items[position] as T)
             }
-            @Suppress("UNCHECKED_CAST")
-            itemClickListener?.invoke(parent, position, adapter.items[position] as T)
         }
+
         return holder
     }
 

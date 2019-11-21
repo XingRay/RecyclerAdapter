@@ -34,7 +34,7 @@ class OneTypeItemSelectActivity : ListActivity() {
                 }, null)
     }
 
-    override fun loadData(): List<Any> {
+    override fun loadData(): List<Any?> {
         return repository.loadData0()
     }
 }

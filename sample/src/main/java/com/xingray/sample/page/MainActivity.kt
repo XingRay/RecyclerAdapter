@@ -17,6 +17,7 @@ import com.xingray.sample.page.multitype.MultiTypeSimpleActivity
 import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutItemClickActivity
 import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutItemSelectActivity
 import com.xingray.sample.page.multitypemultilayout.MultiTypeMultiLayoutSimpleActivity
+import com.xingray.sample.page.nullsupport.NullSupportActivity
 import com.xingray.sample.page.onetype.OneTypeItemClickActivity
 import com.xingray.sample.page.onetype.OneTypeItemSelectActivity
 import com.xingray.sample.page.onetype.OneTypeSimpleActivity
@@ -83,6 +84,9 @@ class MainActivity : AppCompatActivity() {
                 },
                 Test("java test") {
                     JavaTestActivity.start(this)
+                },
+                Test("null support test") {
+                    NullSupportActivity.start(this)
                 }
         ))
     }

@@ -1,6 +1,6 @@
 package com.xingray.sample.page;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 
 import com.xingray.recycleradapter.RecyclerAdapter;
@@ -21,9 +21,9 @@ import java.util.List;
  */
 public class JavaTestActivity extends ListActivity {
 
-    public static void start(Context context) {
-        Intent starter = new Intent(context, JavaTestActivity.class);
-        context.startActivity(starter);
+    public static void start(Activity activity) {
+        Intent starter = new Intent(activity, JavaTestActivity.class);
+        activity.startActivity(starter);
     }
 
     @NotNull

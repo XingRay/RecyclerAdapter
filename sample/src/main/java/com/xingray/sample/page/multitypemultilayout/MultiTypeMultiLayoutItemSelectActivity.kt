@@ -46,7 +46,7 @@ class MultiTypeMultiLayoutItemSelectActivity : ListActivity() {
                 .addToAdapter()
     }
 
-    override fun loadData(): List<Any> {
+    override fun loadData(): List<Any?> {
         return repository.loadData()
     }
 }

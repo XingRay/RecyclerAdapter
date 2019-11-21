@@ -32,7 +32,7 @@ class MultiTypeMultiLayoutSimpleActivity : ListActivity() {
                 .addLayoutViewSupport(3, Data1Layout1ViewHolder::class.java)
     }
 
-    override fun loadData(): List<Any> {
+    override fun loadData(): List<Any?> {
         return repository.loadData()
     }
 }
