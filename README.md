@@ -28,7 +28,7 @@ allprojects {
 ``` groovy
 
     dependencies {
-            implementation 'com.github.XingRay:RecyclerAdapter:3.6.5'
+            implementation 'com.github.XingRay:RecyclerAdapter:3.7.0'
     }
 
 ```
